@@ -44,7 +44,7 @@ else
 fi
 
 echo ""
-echo "✓ ClawGate ${VERSION} installed successfully!"
+echo "! ClawGate ${VERSION} installed successfully !"
 echo ""
 echo "Quick start (on your laptop):"
 echo "  clawgate keygen"
