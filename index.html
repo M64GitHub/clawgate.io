@@ -245,8 +245,12 @@
         .hero-subtitle {
             font-size: clamp(1rem, 2vw, 1.25rem);
             color: var(--text-secondary);
-            max-width: 600px;
+            max-width: 650px;
             margin-bottom: 48px;
+        }
+
+        .hero-subtitle strong {
+            color: var(--red-primary);
         }
 
         /* Install box */
@@ -255,7 +259,7 @@
             border: 2px solid var(--cyan-primary);
             border-radius: 12px;
             padding: 24px 32px;
-            margin-bottom: 32px;
+            margin-bottom: 24px;
             box-shadow: 
                 0 0 40px rgba(0, 212, 255, 0.2),
                 inset 0 0 40px rgba(0, 212, 255, 0.05);
@@ -313,6 +317,29 @@
 
         .copy-btn.copied {
             background: var(--cyan-glow);
+        }
+
+        /* Trust strip */
+        .trust-strip {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 32px;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .trust-item svg {
+            width: 16px;
+            height: 16px;
         }
 
         .hero-badges {
@@ -974,6 +1001,10 @@
                 text-align: center;
                 padding: 24px;
             }
+
+            .trust-strip {
+                gap: 16px;
+            }
         }
 
         /* Scrollbar */
@@ -1164,11 +1195,9 @@
             <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
         </symbol>
 
-        <!-- Transport/Encrypted icon -->
-        <symbol id="icon-transport" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="11" width="18" height="10" rx="2"/>
-            <path d="M12 3v8"/>
-            <path d="m8 7 4 4 4-4"/>
+        <!-- Check icon (small) -->
+        <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
         </symbol>
     </svg>
 
@@ -1177,14 +1206,14 @@
         <div class="container">
             <a href="#" class="nav-logo">
                 <svg><use href="#icon-claw"/></svg>
-					<span>Claw</span>Gate
+                <span>Claw</span>Gate
             </a>
             <ul class="nav-links">
                 <li><a href="#problem">Problem</a></li>
                 <li><a href="#solution">Solution</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#security">Security</a></li>
                 <li><a href="#quickstart">Quick Start</a></li>
+                <li><a href="#security">Security</a></li>
+                <li><a href="#features">Features</a></li>
             </ul>
             <a href="https://github.com/M64GitHub/clawgate" class="nav-github" target="_blank">
                 <svg width="20" height="20"><use href="#icon-github"/></svg>
@@ -1202,7 +1231,7 @@
             Zero Trust File Access
         </p>
         <h1 class="hero-title">Secure Files for AI Agents</h1>
-        <p class="hero-subtitle">Give your AI agent scoped, time-limited, audited access to your files. End-to-end encrypted. Capability-based. No full filesystem exposure.</p>
+        <p class="hero-subtitle">Give your AI agent scoped, time-limited, audited access to your files. <strong>Assume the agent machine is compromised.</strong> End-to-end encrypted. Capability-based. No full filesystem exposure.</p>
         
         <div class="install-box">
             <p class="install-label">Install in seconds</p>
@@ -1212,31 +1241,34 @@
             </div>
         </div>
 
+        <!-- Trust Strip -->
+        <div class="trust-strip">
+            <div class="trust-item">
+                <svg><use href="#icon-check"/></svg>
+                E2E encrypted
+            </div>
+            <div class="trust-item">
+                <svg><use href="#icon-check"/></svg>
+                Signed tokens
+            </div>
+            <div class="trust-item">
+                <svg><use href="#icon-check"/></svg>
+                No full FS
+            </div>
+            <div class="trust-item">
+                <svg><use href="#icon-check"/></svg>
+                Audit log
+            </div>
+        </div>
+
         <div class="hero-badges">
-            <a href="https://github.com/M64GitHub/clawgate/actions"><img src="https://github.com/M64GitHub/clawgate/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
             <a href="https://github.com/M64GitHub/clawgate/releases"><img src="https://img.shields.io/github/v/release/M64GitHub/clawgate?include_prereleases" alt="Release"></a>
             <a href="https://github.com/M64GitHub/clawgate/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License"></a>
             <img src="https://img.shields.io/badge/Zig-0.16+-f7a41d?logo=zig&logoColor=white" alt="Zig">
         </div>
     </section>
 
-    <!-- Demo Video -->
-    <section class="video-section" id="demo">
-        <div class="container">
-            <div class="section-header">
-                <p class="section-label">See it in action</p>
-                <h2 class="section-title">Watch the Demo</h2>
-            </div>
-            <div class="video-container">
-                <div class="video-placeholder-icon">
-                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                </div>
-                <p class="video-placeholder-text">Demo video coming soon</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Problem -->
+    <!-- Problem (moved UP - right after Hero) -->
     <section id="problem">
         <div class="container">
             <div class="section-header">
@@ -1334,11 +1366,159 @@
         </div>
     </section>
 
-    <!-- Features -->
+    <!-- Quick Start (moved UP - right after Solution) -->
+    <section id="quickstart">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-label">Get Started</p>
+                <h2 class="section-title">Up and Running in 60 Seconds</h2>
+            </div>
+            <div class="quickstart-steps">
+                <div class="quickstart-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Install & Generate Keys</h3>
+                        <p>On your primary machine (laptop/workstation)</p>
+                        <pre><code>curl -sSL https://clawgate.io/install.sh | sh
+clawgate keygen</code></pre>
+                    </div>
+                </div>
+                <div class="quickstart-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Grant Access</h3>
+                        <p>Create a time-limited token for specific paths</p>
+                        <pre><code>clawgate grant --read "~/projects/**" --ttl 24h > token.txt
+# Copy token.txt and public.key to agent machine</code></pre>
+                    </div>
+                </div>
+                <div class="quickstart-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Start Agent</h3>
+                        <p>On the isolated machine (Mac Mini, VPS, container)</p>
+                        <pre><code>clawgate token add "$(cat token.txt)"
+clawgate --mode agent</code></pre>
+                    </div>
+                </div>
+                <div class="quickstart-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Connect</h3>
+                        <p>Back on your primary machine</p>
+                        <pre><code>clawgate --mode resource --connect &lt;agent-ip&gt;:4223</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Works With (moved UP - after Quickstart) -->
+    <section id="agents">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-label">Compatibility</p>
+                <h2 class="section-title">Works With Any Agent</h2>
+                <p class="section-subtitle">Skill files for CLI-based agents. MCP server for tool-based agents.</p>
+            </div>
+            <div class="works-with-grid">
+                <div class="works-with-card">
+                    <div class="works-with-icon">
+                        <svg><use href="#icon-claw"/></svg>
+                    </div>
+                    <h3>OpenClaw</h3>
+                    <p>Skill file (CLI)</p>
+                </div>
+                <div class="works-with-card">
+                    <div class="works-with-icon">
+                        <svg><use href="#icon-code"/></svg>
+                    </div>
+                    <h3>Claude Code</h3>
+                    <p>Skill file + MCP</p>
+                </div>
+                <div class="works-with-card">
+                    <div class="works-with-icon">
+                        <svg><use href="#icon-cursor"/></svg>
+                    </div>
+                    <h3>Cursor</h3>
+                    <p>MCP server</p>
+                </div>
+                <div class="works-with-card">
+                    <div class="works-with-icon">
+                        <svg><use href="#icon-diamond"/></svg>
+                    </div>
+                    <h3>OpenCode</h3>
+                    <p>Skill file + MCP</p>
+                </div>
+                <div class="works-with-card">
+                    <div class="works-with-icon">
+                        <svg><use href="#icon-hexagon"/></svg>
+                    </div>
+                    <h3>Codex</h3>
+                    <p>Skill file + MCP</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security (moved UP - before Features) -->
+    <section class="security-section" id="security">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-label">Defense in Depth</p>
+                <h2 class="section-title">Security Model</h2>
+                <p class="section-subtitle">Multiple layers of protection. Assume breach at every layer.</p>
+            </div>
+            <table class="security-table">
+                <thead>
+                    <tr>
+                        <th>Layer</th>
+                        <th>Protection</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><svg><use href="#icon-lock"/></svg> Transport</td>
+                        <td>X25519 + XChaCha20-Poly1305 end-to-end encryption</td>
+                    </tr>
+                    <tr>
+                        <td><svg><use href="#icon-key-exchange"/></svg> Forward Secrecy</td>
+                        <td>Fresh ephemeral keys per session</td>
+                    </tr>
+                    <tr>
+                        <td><svg><use href="#icon-signature"/></svg> Authentication</td>
+                        <td>Ed25519 signed JWT capability tokens</td>
+                    </tr>
+                    <tr>
+                        <td><svg><use href="#icon-target"/></svg> Authorization</td>
+                        <td>Per-request path scope validation</td>
+                    </tr>
+                    <tr>
+                        <td><svg><use href="#icon-path"/></svg> Path Safety</td>
+                        <td>Canonicalization, symlink rejection, traversal protection</td>
+                    </tr>
+                    <tr>
+                        <td><svg><use href="#icon-forbidden"/></svg> Forbidden Paths</td>
+                        <td>~/.ssh, ~/.aws, ~/.gnupg — hardcoded, ungrantable</td>
+                    </tr>
+                    <tr>
+                        <td><svg><use href="#icon-clock"/></svg> Time Limits</td>
+                        <td>Tokens expire, limiting blast radius</td>
+                    </tr>
+                    <tr>
+                        <td><svg><use href="#icon-audit"/></svg> Audit Trail</td>
+                        <td>Every operation logged locally</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Features (renamed label) -->
     <section id="features">
         <div class="container">
             <div class="section-header">
-                <p class="section-label">Built for Security</p>
+                <p class="section-label">Security Guarantees</p>
                 <h2 class="section-title">Features</h2>
             </div>
             <div class="features-grid">
@@ -1400,150 +1580,18 @@
         </div>
     </section>
 
-    <!-- Security -->
-    <section class="security-section" id="security">
+    <!-- Demo Video (moved DOWN - near end) -->
+    <section class="video-section" id="demo">
         <div class="container">
             <div class="section-header">
-                <p class="section-label">Defense in Depth</p>
-                <h2 class="section-title">Security Model</h2>
-                <p class="section-subtitle">Multiple layers of protection. Assume breach at every layer.</p>
+                <p class="section-label">See it in action</p>
+                <h2 class="section-title">Watch the Demo</h2>
             </div>
-            <table class="security-table">
-                <thead>
-                    <tr>
-                        <th>Layer</th>
-                        <th>Protection</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><svg><use href="#icon-lock"/></svg> Transport</td>
-                        <td>X25519 + XChaCha20-Poly1305 end-to-end encryption</td>
-                    </tr>
-                    <tr>
-                        <td><svg><use href="#icon-key-exchange"/></svg> Forward Secrecy</td>
-                        <td>Fresh ephemeral keys per session</td>
-                    </tr>
-                    <tr>
-                        <td><svg><use href="#icon-signature"/></svg> Authentication</td>
-                        <td>Ed25519 signed JWT capability tokens</td>
-                    </tr>
-                    <tr>
-                        <td><svg><use href="#icon-target"/></svg> Authorization</td>
-                        <td>Per-request path scope validation</td>
-                    </tr>
-                    <tr>
-                        <td><svg><use href="#icon-path"/></svg> Path Safety</td>
-                        <td>Canonicalization, symlink rejection, traversal protection</td>
-                    </tr>
-                    <tr>
-                        <td><svg><use href="#icon-forbidden"/></svg> Forbidden Paths</td>
-                        <td>~/.ssh, ~/.aws, ~/.gnupg — hardcoded, ungrantable</td>
-                    </tr>
-                    <tr>
-                        <td><svg><use href="#icon-clock"/></svg> Time Limits</td>
-                        <td>Tokens expire, limiting blast radius</td>
-                    </tr>
-                    <tr>
-                        <td><svg><use href="#icon-audit"/></svg> Audit Trail</td>
-                        <td>Every operation logged locally</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    <!-- Works With -->
-    <section id="agents">
-        <div class="container">
-            <div class="section-header">
-                <p class="section-label">Compatibility</p>
-                <h2 class="section-title">Works With Any Agent</h2>
-                <p class="section-subtitle">Skill files for CLI-based agents. MCP server for tool-based agents.</p>
-            </div>
-            <div class="works-with-grid">
-                <div class="works-with-card">
-                    <div class="works-with-icon">
-                        <svg><use href="#icon-claw"/></svg>
-                    </div>
-                    <h3>OpenClaw</h3>
-                    <p>Skill file (CLI)</p>
+            <div class="video-container">
+                <div class="video-placeholder-icon">
+                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                 </div>
-                <div class="works-with-card">
-                    <div class="works-with-icon">
-                        <svg><use href="#icon-code"/></svg>
-                    </div>
-                    <h3>Claude Code</h3>
-                    <p>Skill file + MCP</p>
-                </div>
-                <div class="works-with-card">
-                    <div class="works-with-icon">
-                        <svg><use href="#icon-cursor"/></svg>
-                    </div>
-                    <h3>Cursor</h3>
-                    <p>MCP server</p>
-                </div>
-                <div class="works-with-card">
-                    <div class="works-with-icon">
-                        <svg><use href="#icon-diamond"/></svg>
-                    </div>
-                    <h3>OpenCode</h3>
-                    <p>Skill file + MCP</p>
-                </div>
-                <div class="works-with-card">
-                    <div class="works-with-icon">
-                        <svg><use href="#icon-hexagon"/></svg>
-                    </div>
-                    <h3>Codex</h3>
-                    <p>Skill file + MCP</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Quick Start -->
-    <section id="quickstart">
-        <div class="container">
-            <div class="section-header">
-                <p class="section-label">Get Started</p>
-                <h2 class="section-title">Up and Running in 60 Seconds</h2>
-            </div>
-            <div class="quickstart-steps">
-                <div class="quickstart-step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h3>Install & Generate Keys</h3>
-                        <p>On your primary machine (laptop/workstation)</p>
-                        <pre><code>curl -sSL https://clawgate.io/install.sh | sh
-clawgate keygen</code></pre>
-                    </div>
-                </div>
-                <div class="quickstart-step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h3>Grant Access</h3>
-                        <p>Create a time-limited token for specific paths</p>
-                        <pre><code>clawgate grant --read "~/projects/**" --ttl 24h > token.txt
-# Copy token.txt and public.key to agent machine</code></pre>
-                    </div>
-                </div>
-                <div class="quickstart-step">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h3>Start Agent</h3>
-                        <p>On the isolated machine (Mac Mini, VPS, container)</p>
-                        <pre><code>clawgate token add "$(cat token.txt)"
-clawgate --mode agent</code></pre>
-                    </div>
-                </div>
-                <div class="quickstart-step">
-                    <div class="step-number">4</div>
-                    <div class="step-content">
-                        <h3>Connect</h3>
-                        <p>Back on your primary machine</p>
-                        <pre><code>clawgate --mode resource --connect &lt;agent-ip&gt;:4223</code></pre>
-                    </div>
-                </div>
+                <p class="video-placeholder-text">Demo video coming soon</p>
             </div>
         </div>
     </section>
@@ -1572,7 +1620,7 @@ clawgate --mode agent</code></pre>
                 <div>
                     <div class="footer-logo">
                         <svg><use href="#icon-claw"/></svg>
-							<span>Claw</span>Gate
+                        <span>Claw</span>Gate
                     </div>
                     <p class="footer-text">Secure file access for the AI agent era</p>
                 </div>
