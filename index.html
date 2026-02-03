@@ -47,6 +47,7 @@
         }
 
         html {
+    font-size: 14px;  /* default is 16px */
             scroll-behavior: smooth;
         }
 
@@ -256,7 +257,7 @@
         /* Install box */
         .install-box {
             background: var(--bg-card);
-            border: 2px solid var(--cyan-primary);
+	    border: 1px solid rgba(0, 212, 255, 0.6);
             border-radius: 12px;
             padding: 24px 32px;
             margin-bottom: 24px;
@@ -385,6 +386,20 @@
             max-width: 600px;
             margin: 0 auto;
         }
+
+.demo-image {
+    max-width: 900px;
+    margin: 0 auto;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.demo-image img {
+    width: 100%;
+    display: block;
+}
 
         /* Video section */
         .video-section {
@@ -1011,7 +1026,7 @@
     max-width: 800px;
     margin: 48px auto 0;
     background: rgba(0, 212, 255, 0.08);
-    border: 1px solid var(--cyan-primary);
+	    border: 1px solid rgba(0, 212, 255, 0.6);
     border-radius: 12px;
     padding: 24px 28px;
 }
@@ -1244,7 +1259,7 @@
                 <span>Claw</span>Gate
             </a>
             <ul class="nav-links">
-                <li><a href="#problem">Problem</a></li>
+<li><a href="https://github.com/M64GitHub/clawgate/tree/master/docs" target="_blank">Docs</a></li>
                 <li><a href="#solution">Solution</a></li>
                 <li><a href="#quickstart">Quick Start</a></li>
                 <li><a href="#security">Security</a></li>
@@ -1638,21 +1653,18 @@ clawgate token add "$(cat token.txt)"</code></pre>
         </div>
     </section>
 
-    <!-- Demo Video (moved DOWN - near end) -->
-    <section class="video-section" id="demo">
-        <div class="container">
-            <div class="section-header">
-                <p class="section-label">See it in action</p>
-                <h2 class="section-title">Watch the Demo</h2>
-            </div>
-            <div class="video-container">
-                <div class="video-placeholder-icon">
-                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                </div>
-                <p class="video-placeholder-text">Demo video coming soon</p>
-            </div>
+<section id="demo">
+    <div class="container">
+        <div class="section-header">
+            <p class="section-label">See it in action</p>
+            <h2 class="section-title">Real Usage</h2>
+            <p class="section-subtitle">AI agent reads files remotely. Every access logged.</p>
         </div>
-    </section>
+        <div class="demo-image">
+            <img src="demo-interaction.png" alt="ClawGate in action - AI reading files with audit trail">
+        </div>
+    </div>
+</section>
 
     <!-- CTA -->
     <section class="cta-section">
