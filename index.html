@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClawGate — Secure File Access for AI Agents</title>
+    <title>ClawGate - Secure File Access for AI Agents</title>
     <meta name="description" content="Give your AI agent secure, scoped, time-limited file access. Zero trust architecture with end-to-end encryption.">
     <meta name="keywords" content="AI security, OpenClaw, Claude Code, file access, capability tokens, encryption">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="ClawGate — Secure File Access for AI Agents">
+    <meta property="og:title" content="ClawGate - Secure File Access for AI Agents">
     <meta property="og:description" content="Zero trust file access for isolated AI agents. E2E encrypted, capability-based, audited.">
     <meta property="og:url" content="https://clawgate.io">
     <meta property="og:type" content="website">
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="ClawGate — Secure File Access for AI Agents">
+    <meta name="twitter:title" content="ClawGate - Secure File Access for AI Agents">
     <meta name="twitter:description" content="Zero trust file access for isolated AI agents. E2E encrypted, capability-based, audited.">
     
     <!-- Fonts -->
@@ -1412,7 +1412,7 @@
                         <svg><use href="#icon-clock"/></svg>
                     </div>
                     <h3>Time-Bounded</h3>
-                    <p>Tokens expire. 1 hour, 24 hours, 7 days — you choose.</p>
+                    <p>Tokens expire. 1 hour, 24 hours, 7 days - you choose.</p>
                 </div>
                 <div class="solution-card">
                     <div class="solution-icon">
@@ -1479,11 +1479,11 @@ clawgate --mode agent</code></pre>
 
 <div class="quickstart-note">
     <p><strong>That's it!</strong> Steps 1-3 are one-time setup. After that, just create new tokens anytime:</p>
-    <pre><code># On laptop — grant new access
+    <pre><code># On laptop - grant new access
 clawgate grant --write "~/projects/new-app/**" --ttl 1h > token.txt
 scp token.txt agent-machine:
 
-# On agent — add without restart
+# On agent - add without restart
 clawgate token add "$(cat token.txt)"</code></pre>
     <p>Tokens hot-reload. No restart needed.</p>
 </div>
@@ -1585,7 +1585,7 @@ clawgate token add "$(cat token.txt)"</code></pre>
                     </tr>
                     <tr>
                         <td><svg><use href="#icon-forbidden"/></svg> Forbidden Paths</td>
-                        <td>~/.ssh, ~/.aws, ~/.gnupg — hardcoded, ungrantable</td>
+                        <td>~/.ssh, ~/.aws, ~/.gnupg - hardcoded, ungrantable</td>
                     </tr>
                     <tr>
                         <td><svg><use href="#icon-clock"/></svg> Time Limits</td>
@@ -1632,7 +1632,7 @@ clawgate token add "$(cat token.txt)"</code></pre>
                     </div>
                     <div class="feature-content">
                         <h3>Forbidden Paths</h3>
-                        <p><code>~/.ssh</code>, <code>~/.aws</code>, <code>~/.gnupg</code> — hardcoded blocked. Always.</p>
+                        <p><code>~/.ssh</code>, <code>~/.aws</code>, <code>~/.gnupg</code> - hardcoded blocked. Always.</p>
                     </div>
                 </div>
                 <div class="feature-card">
