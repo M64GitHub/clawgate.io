@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClawGate - Secure File Access for AI Agents</title>
-    <meta name="description" content="Give your AI agent secure, scoped, time-limited file access. Zero trust architecture with end-to-end encryption.">
+    <title>ClawGate - Secure File & Git Access for AI Agents</title>
+    <meta name="description" content="Give your AI agent secure, scoped, time-limited file and git access. Zero trust architecture with end-to-end encryption.">
     <meta name="keywords" content="AI security, OpenClaw, Claude Code, file access, capability tokens, encryption">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="ClawGate - Secure File Access for AI Agents">
-    <meta property="og:description" content="Zero trust file access for isolated AI agents. E2E encrypted, capability-based, audited.">
+    <meta property="og:title" content="ClawGate - Secure File & Git Access for AI Agents">
+    <meta property="og:description" content="Zero trust file and git access for isolated AI agents. E2E encrypted, capability-based, audited.">
     <meta property="og:url" content="https://clawgate.io">
     <meta property="og:type" content="website">
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="ClawGate - Secure File Access for AI Agents">
-    <meta name="twitter:description" content="Zero trust file access for isolated AI agents. E2E encrypted, capability-based, audited.">
+    <meta name="twitter:title" content="ClawGate - Secure File & Git Access for AI Agents">
+    <meta name="twitter:description" content="Zero trust file and git access for isolated AI agents. E2E encrypted, capability-based, audited.">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1293,8 +1293,8 @@
     <!-- Hero -->
     <section class="hero">
 
-        <h1 class="hero-title">Secure Files for AI Agents</h1>
-			<p class="hero-subtitle">Give your AI agent scoped, time-limited, audited access - without exposing your filesystem.<br />
+        <h1 class="hero-title">Secure Files & Git for AI Agents</h1>
+			<p class="hero-subtitle">Give your AI agent scoped, time-limited, audited file and git access - without exposing your filesystem.<br />
 				<strong>Assume the agent machine is compromised.</strong><br /> End-to-end encrypted. Capability-based. No full filesystem access.</p>
         
         <div class="install-box">
@@ -1445,7 +1445,9 @@
         <h3>Generate Keys & Grant Access</h3>
         <p>On your primary machine (laptop/workstation)</p>
         <pre><code>clawgate keygen
-clawgate grant --read "~/projects/**" --ttl 24h > token.txt</code></pre>
+clawgate grant --read "~/projects/**" --ttl 24h > token.txt
+# Or with git access:
+clawgate grant --git "~/projects/**" --ttl 24h > token.txt</code></pre>
     </div>
 </div>
 <div class="quickstart-step">
@@ -1588,6 +1590,10 @@ clawgate token add "$(cat token.txt)"</code></pre>
                         <td>~/.ssh, ~/.aws, ~/.gnupg - hardcoded, ungrantable</td>
                     </tr>
                     <tr>
+                        <td><svg><use href="#icon-terminal"/></svg> Git Allowlists</td>
+                        <td>Three-tier command allowlists, blocked flags (-c, --exec)</td>
+                    </tr>
+                    <tr>
                         <td><svg><use href="#icon-clock"/></svg> Time Limits</td>
                         <td>Tokens expire, limiting blast radius</td>
                     </tr>
@@ -1651,6 +1657,15 @@ clawgate token add "$(cat token.txt)"</code></pre>
                     <div class="feature-content">
                         <h3>Auto Reconnect</h3>
                         <p>Connection drops? Reconnects automatically. Seamless.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg><use href="#icon-terminal"/></svg>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Git Operations</h3>
+                        <p>Three permission tiers: read-only, write, full. Command allowlists block dangerous flags.</p>
                     </div>
                 </div>
                 <div class="feature-card">
@@ -1720,7 +1735,7 @@ clawgate token add "$(cat token.txt)"</code></pre>
                         <svg><use href="#icon-claw"/></svg>
                         <span>Claw</span>Gate
                     </div>
-                    <p class="footer-text">Secure file access for the AI agent era</p>
+                    <p class="footer-text">Secure file & git access for the AI agent era</p>
                 </div>
                 <div class="footer-links">
                     <a href="https://github.com/M64GitHub/clawgate" target="_blank">GitHub</a>
