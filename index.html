@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ClawGate - Secure File & Git Access for AI Agents</title>
-    <meta name="description" content="Give your AI agent secure, scoped, time-limited file and git access. Zero trust architecture with end-to-end encryption.">
-    <meta name="keywords" content="AI security, OpenClaw, Claude Code, file access, capability tokens, encryption">
-    
+    <meta name="description" content="Give your AI agent scoped, time-limited, audited file and git access. Zero trust. End-to-end encrypted. Capability-based.">
+
+
     <!-- Open Graph -->
     <meta property="og:title" content="ClawGate - Secure File & Git Access for AI Agents">
     <meta property="og:description" content="Zero trust file and git access for isolated AI agents. E2E encrypted, capability-based, audited.">
@@ -18,1759 +18,1313 @@
     <meta name="twitter:title" content="ClawGate - Secure File & Git Access for AI Agents">
     <meta name="twitter:description" content="Zero trust file and git access for isolated AI agents. E2E encrypted, capability-based, audited.">
     
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0a0a0f;
-            --bg-card: #12121a;
-            --bg-card-hover: #1a1a25;
-            --red-primary: #e63946;
-            --red-glow: #ff4d4d;
-            --cyan-primary: #00d4ff;
-            --cyan-glow: #4ecdc4;
-            --purple-glow: #7b2cbf;
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0b0;
-            --text-muted: #606070;
-            --border-color: #2a2a3a;
+            --bg-primary: #0f1117;
+            --bg-secondary: #161922;
+            --bg-tertiary: #1c1f2b;
+            --bg-card: #1a1d28;
+            --bg-card-hover: #1f2330;
+            --bg-code: #12141c;
+
+            --text-primary: #e8eaf0;
+            --text-secondary: #9ca3b4;
+            --text-muted: #6b7280;
+            --text-heading: #f0f2f7;
+
+            --accent: #e07a3a;
+            --accent-dim: rgba(224, 122, 58, 0.12);
+            --accent-border: rgba(224, 122, 58, 0.25);
+            --accent-glow: rgba(224, 122, 58, 0.06);
+
+            --green: #34d399;
+            --green-dim: rgba(52, 211, 153, 0.1);
+            --red: #f87171;
+            --red-dim: rgba(248, 113, 113, 0.08);
+            --yellow: #fbbf24;
+            --blue: #60a5fa;
+
+            --border: rgba(255, 255, 255, 0.06);
+            --border-strong: rgba(255, 255, 255, 0.1);
+
+            --radius: 8px;
+            --radius-lg: 12px;
+
+            --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
         }
 
-        * {
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
         html {
-    font-size: 14px;  /* default is 16px */
+            font-size: 15px;
             scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-dark);
+            font-family: var(--font-body);
+            background: var(--bg-primary);
             color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
+            line-height: 1.65;
         }
 
-        /* Background effects */
-        .bg-grid {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            pointer-events: none;
-            z-index: 0;
+        ::selection {
+            background: var(--accent);
+            color: #fff;
         }
 
-        .bg-glow {
-            position: fixed;
-            width: 600px;
-            height: 600px;
-            border-radius: 50%;
-            filter: blur(150px);
-            opacity: 0.15;
-            pointer-events: none;
-            z-index: 0;
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+        a:hover {
+            color: #f0935a;
         }
 
-        .bg-glow-1 {
-            top: -200px;
-            left: -200px;
-            background: var(--red-primary);
-        }
-
-        .bg-glow-2 {
-            top: 50%;
-            right: -200px;
-            background: var(--cyan-primary);
-        }
-
-        .bg-glow-3 {
-            bottom: -200px;
-            left: 30%;
-            background: var(--purple-glow);
-        }
-
-        /* Container */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Navigation */
-        nav {
+        /* ========== NAV ========== */
+        .nav {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            padding: 16px 0;
-            background: rgba(10, 10, 15, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
             z-index: 100;
+            background: rgba(15, 17, 23, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
         }
-
-        nav .container {
+        .nav-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 56px;
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
         }
-
-        .nav-logo {
-            font-family: 'Titillium Web', monospace;
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: var(--text-primary);
-            text-decoration: none;
+        .nav-brand {
             display: flex;
             align-items: center;
-            gap: 0px;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: var(--text-heading);
+            letter-spacing: -0.01em;
         }
-
-        .nav-logo span {
-            color: var(--red-primary);
+        .nav-brand svg {
+            width: 22px;
+            height: 22px;
         }
-
-        .nav-logo svg {
-            width: 28px;
-            height: 28px;
-        }
-
         .nav-links {
             display: flex;
-            gap: 32px;
+            align-items: center;
+            gap: 28px;
             list-style: none;
         }
-
         .nav-links a {
             color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: color 0.2s;
+            font-size: 0.87rem;
+            font-weight: 450;
+            transition: color 0.15s;
         }
-
         .nav-links a:hover {
-            color: var(--cyan-primary);
-        }
-
-        .nav-github {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
             color: var(--text-primary);
-            text-decoration: none;
-            font-size: 0.9rem;
+        }
+        .nav-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: transparent;
+            border: 1px solid var(--border-strong);
+            border-radius: 6px;
+            color: var(--text-secondary) !important;
+            font-size: 0.83rem;
             font-weight: 500;
-            transition: all 0.2s;
+            transition: all 0.15s;
         }
-
-        .nav-github:hover {
-            border-color: var(--cyan-primary);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+        .nav-cta:hover {
+            background: rgba(255,255,255,0.04);
+            color: var(--text-primary) !important;
+            border-color: rgba(255,255,255,0.15);
         }
-
-        /* Hero */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 120px 24px 80px;
-        }
-
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-
-
-
-.hero-logo-wrapper {
-    position: relative;
-    width: 100%;
-    max-width: 700px;
-    margin-bottom: 24px;
-}
-
-.hero-logo {
-    width: 100%;
-    animation: float 6s ease-in-out infinite;
-    filter: drop-shadow(0 0 40px rgba(230, 57, 70, 0.3));
-    border-radius: 12px;
-}
-
-.hero-tagline {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 10px 24px;
-    backdrop-filter: blur(10px);
-    margin: 0;
-    white-space: nowrap;
-    
-    font-family: 'Titillium Web', monospace;
-    font-size: clamp(1rem, 3vw, 1.3rem);
-    color: var(--cyan-primary);
-    text-transform: uppercase;
-    letter-spacing: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-}
-
-        .hero-tagline svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        .hero-title {
-            font-family: 'Titillium Web', monospace;
-            font-size: clamp(2rem, 6vw, 3.5rem);
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 24px;
-            background: linear-gradient(135deg, var(--text-primary) 0%, var(--cyan-primary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-subtitle {
-            font-size: clamp(1rem, 2vw, 1.25rem);
-            color: var(--text-secondary);
-            max-width: 650px;
-            margin-bottom: 48px;
-        }
-
-        .hero-subtitle strong {
-            color: var(--red-primary);
-        }
-
-        /* Install box */
-        .install-box {
-            background: var(--bg-card);
-	    border: 1px solid rgba(0, 212, 255, 0.6);
-            border-radius: 12px;
-            padding: 24px 32px;
-            margin-bottom: 24px;
-            box-shadow: 
-                0 0 40px rgba(0, 212, 255, 0.2),
-                inset 0 0 40px rgba(0, 212, 255, 0.05);
-            animation: pulse-border 3s ease-in-out infinite;
-        }
-
-        @keyframes pulse-border {
-            0%, 100% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.2), inset 0 0 40px rgba(0, 212, 255, 0.05); }
-            50% { box-shadow: 0 0 60px rgba(0, 212, 255, 0.3), inset 0 0 40px rgba(0, 212, 255, 0.08); }
-        }
-
-        .install-label {
-            font-size: 0.8rem;
-            color: var(--cyan-primary);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 12px;
-        }
-
-        .install-command {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .install-command code {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: clamp(0.85rem, 2vw, 1.1rem);
-            color: var(--text-primary);
-            background: rgba(0, 0, 0, 0.3);
-            padding: 12px 20px;
-            border-radius: 8px;
-            user-select: all;
-        }
-
-        .copy-btn {
-            background: var(--cyan-primary);
-            color: var(--bg-dark);
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-family: 'Inter', sans-serif;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .copy-btn:hover {
-            background: var(--cyan-glow);
-            transform: scale(1.05);
-        }
-
-        .copy-btn.copied {
-            background: var(--cyan-glow);
-        }
-
-        /* Trust strip */
-        .trust-strip {
-            display: flex;
-            gap: 24px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-bottom: 32px;
-        }
-
-        .trust-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-
-        .trust-item svg {
+        .nav-cta svg {
             width: 16px;
             height: 16px;
         }
 
-        .hero-badges {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .hero-badges img {
-            height: 24px;
-        }
-
-        /* Section styles */
-        section {
-            padding: 100px 0;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 64px;
-        }
-
-        .section-label {
-            font-family: 'Titillium Web', monospace;
-            font-size: 1.00rem;
-            color: var(--red-primary);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 16px;
-        }
-
-        .section-title {
-            font-family: 'Titillium Web', monospace;
-            font-size: clamp(1.8rem, 4vw, 2.5rem);
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-
-        .section-subtitle {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-.demo-image {
-    max-width: 900px;
-    margin: 0 auto;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-}
-
-.demo-image img {
-    width: 100%;
-    display: block;
-}
-
-        /* Video section */
-        .video-section {
-            background: linear-gradient(180deg, transparent 0%, rgba(123, 44, 191, 0.05) 50%, transparent 100%);
-        }
-
-        .video-container {
-            max-width: 900px;
-            margin: 0 auto;
-            aspect-ratio: 16 / 9;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 24px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .video-container::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: 
-                radial-gradient(circle at 30% 30%, rgba(230, 57, 70, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 70% 70%, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
-        }
-
-        .video-placeholder-icon {
-            width: 80px;
-            height: 80px;
-            background: var(--red-primary);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-            box-shadow: 0 0 40px rgba(230, 57, 70, 0.4);
-        }
-
-        .video-placeholder-icon svg {
-            width: 32px;
-            height: 32px;
-            fill: white;
-            margin-left: 4px;
-        }
-
-        .video-placeholder-text {
-            font-family: 'Titillium Web', monospace;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Problem section */
-        .problem-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 24px;
-        }
-
-        .problem-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 24px;
-            transition: all 0.3s;
-        }
-
-        .problem-card:hover {
-            border-color: var(--red-primary);
-            transform: translateY(-4px);
-        }
-
-        .problem-card:hover .problem-card-icon svg {
-            filter: drop-shadow(0 0 8px var(--red-primary));
-        }
-
-        .problem-card-icon {
-            margin-bottom: 16px;
-        }
-
-        .problem-card-icon svg {
-            width: 48px;
-            height: 48px;
-            transition: filter 0.3s;
-        }
-
-        .problem-card h3 {
-            font-family: 'Titillium Web', monospace;
-            font-size: 1rem;
-            margin-bottom: 8px;
-            color: var(--red-primary);
-        }
-
-        .problem-card p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* Warning callout */
-        .warning-callout {
-            max-width: 700px;
-            margin: 48px auto 0;
-            background: rgba(230, 57, 70, 0.08);
-            border: 1px solid var(--red-primary);
-            border-radius: 12px;
-            padding: 20px 28px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            box-shadow: 0 0 30px rgba(230, 57, 70, 0.15);
-        }
-
-        .warning-icon {
-            width: 44px;
-            height: 44px;
-            background: var(--red-primary);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-shrink: 0;
-        }
-
-        .warning-icon svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        .warning-content {
-            font-family: 'Titillium Web', monospace;
-            font-size: 1.25rem;
-            line-height: 1.5;
-        }
-
-        .warning-content strong {
-            color: var(--text-primary);
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .warning-content span {
-            color: var(--red-primary);
-        }
-
-        /* Solution section */
-        .solution-section {
-            background: linear-gradient(180deg, transparent 0%, rgba(0, 212, 255, 0.03) 50%, transparent 100%);
-        }
-
-        .solution-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 24px;
-        }
-
-        .solution-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 32px 24px;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .solution-card:hover {
-            border-color: var(--cyan-primary);
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.1);
-        }
-
-        .solution-card:hover .solution-icon svg {
-            filter: drop-shadow(0 0 8px var(--cyan-primary));
-        }
-
-        .solution-icon {
-            width: 72px;
-            height: 72px;
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15) 0%, rgba(123, 44, 191, 0.15) 100%);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            border-radius: 16px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 auto 20px;
-        }
-
-        .solution-icon svg {
-            width: 36px;
-            height: 36px;
-            transition: filter 0.3s;
-        }
-
-        .solution-card h3 {
-            font-family: 'Titillium Web', monospace;
-            font-size: 1.1rem;
-            margin-bottom: 12px;
-        }
-
-        .solution-card p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* Architecture diagram */
-        .architecture {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 48px;
-            margin-top: 64px;
-        }
-
-        .architecture pre {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: clamp(0.6rem, 1.5vw, 0.85rem);
-            color: var(--cyan-primary);
-            overflow-x: auto;
-            line-height: 1.4;
-        }
-
-        /* Features grid */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
-        }
-
-        .feature-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 24px;
-            display: flex;
-            gap: 16px;
-            transition: all 0.3s;
-        }
-
-        .feature-card:hover {
-            border-color: var(--cyan-primary);
-            background: var(--bg-card-hover);
-        }
-
-        .feature-card:hover .feature-icon svg {
-            filter: drop-shadow(0 0 8px var(--cyan-primary));
-        }
-
-        .feature-icon {
-            flex-shrink: 0;
-        }
-
-        .feature-icon svg {
-            width: 32px;
-            height: 32px;
-            transition: filter 0.3s;
-        }
-
-        .feature-content h3 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .feature-content p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* Security section */
-        .security-section {
-            background: linear-gradient(180deg, transparent 0%, rgba(230, 57, 70, 0.03) 50%, transparent 100%);
-        }
-
-        .security-table {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            border-collapse: collapse;
-        }
-
-        .security-table th,
-        .security-table td {
-            padding: 16px 20px;
-            text-align: left;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .security-table th {
-            font-family: 'Titillium Web', monospace;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--cyan-primary);
-            background: var(--bg-card);
-        }
-
-        .security-table td {
-            font-size: 0.95rem;
-        }
-
-        .security-table td:first-child {
-            font-weight: 600;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .security-table td:first-child svg {
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-        }
-
-        .security-table td:last-child {
-            color: var(--text-secondary);
-        }
-
-        .security-table tr:hover td {
-            background: var(--bg-card);
-        }
-
-        /* Works with section */
-        .works-with-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 20px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        @media (max-width: 900px) {
-            .works-with-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 600px) {
-            .works-with-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        .works-with-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 32px 24px;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .works-with-card:hover {
-            border-color: var(--purple-glow);
-            transform: scale(1.02);
-        }
-
-        .works-with-card:hover .works-with-icon svg {
-            filter: drop-shadow(0 0 8px var(--cyan-primary));
-        }
-
-        .works-with-card h3 {
-            font-family: 'Titillium Web', monospace;
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-        }
-
-        .works-with-card p {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-        }
-
-        .works-with-icon {
-            margin-bottom: 16px;
-        }
-
-        .works-with-icon svg {
-            width: 48px;
-            height: 48px;
-            transition: filter 0.3s;
-        }
-
-        /* Quickstart section */
-        .quickstart-steps {
-            display: grid;
-            gap: 32px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .quickstart-step {
-            display: flex;
-            gap: 24px;
-            align-items: flex-start;
-        }
-
-        .step-number {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--red-primary) 0%, var(--purple-glow) 100%);
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Titillium Web', monospace;
-            font-weight: 700;
-            font-size: 1.2rem;
-            flex-shrink: 0;
-        }
-
-        .step-content {
-            flex: 1;
-        }
-
-        .step-content h3 {
-            font-family: 'Titillium Web', monospace;
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-        }
-
-        .step-content p {
-            color: var(--text-secondary);
-            margin-bottom: 12px;
-        }
-
-        .step-content pre {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 16px;
-            overflow-x: auto;
-        }
-
-        .step-content code {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            color: var(--cyan-primary);
-        }
-
-        /* CTA section */
-        .cta-section {
-            text-align: center;
-            padding: 120px 24px;
-            background: linear-gradient(180deg, transparent 0%, rgba(0, 212, 255, 0.05) 100%);
-        }
-
-        .cta-title {
-            font-family: 'Titillium Web', monospace;
-            font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: 700;
-            margin-bottom: 24px;
-        }
-
-        .cta-subtitle {
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-            margin-bottom: 48px;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 16px 32px;
-            border-radius: 8px;
-            font-family: 'Inter', sans-serif;
-            font-weight: 600;
-            font-size: 1rem;
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--red-primary) 0%, var(--purple-glow) 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(230, 57, 70, 0.3);
-        }
-
-        .btn-secondary {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--cyan-primary);
-            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
-        }
-
-        /* Footer */
-        footer {
-            border-top: 1px solid var(--border-color);
-            padding: 48px 0;
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 24px;
-        }
-
-        .footer-logo {
-            font-family: 'Titillium Web', monospace;
-            font-weight: 700;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 0px;
-        }
-
-        .footer-logo span {
-            color: var(--red-primary);
-        }
-
-        .footer-logo svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        .footer-text {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 24px;
-        }
-
-        .footer-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.2s;
-        }
-
-        .footer-links a:hover {
-            color: var(--cyan-primary);
-        }
-
-        /* Mobile menu */
-        .mobile-menu-btn {
+        .mobile-toggle {
             display: none;
             background: none;
             border: none;
-            color: var(--text-primary);
-            font-size: 1.5rem;
+            color: var(--text-secondary);
             cursor: pointer;
+            padding: 4px;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
+        /* ========== LAYOUT ========== */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        .section {
+            padding: 80px 0;
+        }
+        .section + .section {
+            border-top: 1px solid var(--border);
+        }
+        .section-label {
+            display: inline-block;
+            font-size: 0.73rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            letter-spacing: -0.025em;
+            line-height: 1.25;
+            margin-bottom: 10px;
+        }
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            max-width: 560px;
+            line-height: 1.6;
+        }
+        .section-header {
+            margin-bottom: 48px;
+        }
+
+        /* ========== HERO ========== */
+        .hero {
+            padding: 140px 0 80px;
+            text-align: center;
+            position: relative;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 400px;
+            background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 14px;
+            background: var(--accent-dim);
+            border: 1px solid var(--accent-border);
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--accent);
+            margin-bottom: 28px;
+        }
+        .hero-badge svg {
+            width: 14px;
+            height: 14px;
+        }
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            color: var(--text-heading);
+            letter-spacing: -0.035em;
+            line-height: 1.15;
+            margin-bottom: 18px;
+            max-width: 680px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .hero-desc {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            max-width: 540px;
+            margin: 0 auto 36px;
+            line-height: 1.6;
+        }
+        .hero-desc strong {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Install box */
+        .install-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-code);
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius);
+            padding: 12px 16px;
+            margin-bottom: 32px;
+            max-width: 100%;
+        }
+        .install-box code {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow-x: auto;
+        }
+        .install-box .prompt {
+            color: var(--accent);
+            user-select: none;
+        }
+        .copy-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+        .copy-btn:hover {
+            color: var(--text-primary);
+            border-color: var(--border-strong);
+            background: rgba(255,255,255,0.03);
+        }
+        .copy-btn.copied {
+            color: var(--green);
+            border-color: rgba(52, 211, 153, 0.25);
+        }
+
+        /* Feature pills */
+        .hero-features {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+        .hero-feature {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            font-weight: 450;
+        }
+        .hero-feature svg {
+            width: 15px;
+            height: 15px;
+            color: var(--green);
+            flex-shrink: 0;
+        }
+
+        /* Badges */
+        .hero-badges {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .hero-badges img {
+            height: 20px;
+        }
+
+        /* ========== PROBLEM ========== */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-top: 32px;
+        }
+        .problem-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+        }
+        .problem-card h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .problem-card h3 svg {
+            width: 14px;
+            height: 14px;
+            color: var(--red);
+        }
+        .problem-card p {
+            font-size: 0.83rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+        }
+        .problem-bottom {
+            margin-top: 24px;
+            padding: 16px 20px;
+            background: var(--red-dim);
+            border: 1px solid rgba(248, 113, 113, 0.12);
+            border-radius: var(--radius);
+            font-size: 0.87rem;
+            color: var(--text-secondary);
+        }
+        .problem-bottom strong {
+            color: var(--red);
+            font-weight: 600;
+        }
+
+        /* ========== SOLUTION ========== */
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        .solution-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            transition: border-color 0.2s;
+        }
+        .solution-card:hover {
+            border-color: var(--accent-border);
+        }
+        .solution-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-dim);
+            border-radius: 8px;
+            margin-bottom: 14px;
+            color: var(--accent);
+        }
+        .solution-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+        .solution-card h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-bottom: 6px;
+        }
+        .solution-card p {
+            font-size: 0.83rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+        }
+
+        /* ========== ARCHITECTURE ========== */
+        .architecture-wrap {
+            margin-top: 40px;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            overflow-x: auto;
+        }
+        .architecture-wrap img {
+            width: 100%;
+            max-width: 800px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* ========== QUICKSTART ========== */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .step {
+            display: grid;
+            grid-template-columns: 40px 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+        .step-num {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-dim);
+            border: 1px solid var(--accent-border);
+            border-radius: 50%;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .step-content h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-bottom: 4px;
+        }
+        .step-content .step-desc {
+            font-size: 0.83rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+        .code-block {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+        .code-block .comment {
+            color: var(--text-muted);
+        }
+        .code-block .cmd {
+            color: var(--text-primary);
+        }
+        .step-note {
+            margin-top: 20px;
+            padding: 14px 18px;
+            background: var(--accent-dim);
+            border: 1px solid var(--accent-border);
+            border-radius: var(--radius);
+            font-size: 0.83rem;
+            color: var(--text-secondary);
+        }
+        .step-note strong {
+            color: var(--accent);
+        }
+
+        /* ========== WORKS WITH ========== */
+        .compat-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+        .compat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+        .compat-card:hover {
+            border-color: var(--border-strong);
+        }
+        .compat-icon-wrap {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-dim);
+            border-radius: 8px;
+            margin: 0 auto 10px;
+            color: var(--accent);
+        }
+        .compat-icon-wrap svg {
+            width: 18px;
+            height: 18px;
+        }
+        .compat-card h3 {
+            font-size: 0.87rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-bottom: 3px;
+        }
+        .compat-card p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* ========== SECURITY TABLE ========== */
+        .security-table-wrap {
+            overflow-x: auto;
+        }
+        .security-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        .security-table thead {
+            background: var(--bg-tertiary);
+        }
+        .security-table th {
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        .security-table td {
+            padding: 13px 20px;
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .security-table tr:last-child td {
+            border-bottom: none;
+        }
+        .security-table td:first-child {
+            font-weight: 600;
+            color: var(--text-heading);
+            white-space: nowrap;
+            width: 160px;
+        }
+        .security-table td:last-child {
+            color: var(--text-secondary);
+        }
+        .security-table tbody tr {
+            transition: background 0.1s;
+        }
+        .security-table tbody tr:hover {
+            background: rgba(255,255,255,0.015);
+        }
+
+        /* ========== FEATURES ========== */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px;
+            transition: border-color 0.2s;
+        }
+        .feature-card:hover {
+            border-color: var(--border-strong);
+        }
+        .feature-card h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-bottom: 6px;
+        }
+        .feature-card p {
+            font-size: 0.83rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+        }
+
+        /* ========== DEMO ========== */
+        .demo-image {
+            margin-top: 8px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            background: var(--bg-code);
+        }
+        .demo-image img {
+            width: 100%;
+            display: block;
+        }
+        .demo-caption {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 10px;
+        }
+        .demo-group {
+            margin-top: 40px;
+        }
+        .demo-group-title {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-bottom: 14px;
+        }
+        .demo-dual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 8px;
+        }
+
+        /* ========== CTA ========== */
+        .cta-section {
+            text-align: center;
+            padding: 80px 0;
+        }
+        .cta-section h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            letter-spacing: -0.025em;
+            margin-bottom: 10px;
+        }
+        .cta-section p {
+            color: var(--text-secondary);
+            margin-bottom: 28px;
+            font-size: 1rem;
+        }
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            background: var(--accent);
+            color: #fff;
+            font-family: var(--font-body);
+            font-size: 0.88rem;
+            font-weight: 600;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.15s;
+            text-decoration: none;
+        }
+        .btn-primary:hover {
+            background: #d06e30;
+            color: #fff;
+            transform: translateY(-1px);
+        }
+        .btn-primary svg {
+            width: 16px;
+            height: 16px;
+        }
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: var(--font-body);
+            font-size: 0.88rem;
+            font-weight: 500;
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.15s;
+            text-decoration: none;
+        }
+        .btn-secondary:hover {
+            color: var(--text-primary);
+            background: rgba(255,255,255,0.03);
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            border-top: 1px solid var(--border);
+            padding: 32px 0;
+        }
+        .footer-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .footer-brand {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-heading);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .footer-brand svg {
+            width: 18px;
+            height: 18px;
+        }
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+        .footer-links a {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .footer-links a:hover {
+            color: var(--text-secondary);
+        }
+        .footer-right {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+        .footer-right a {
+            color: var(--text-muted);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 900px) {
+            .problem-grid,
+            .solution-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .compat-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .demo-dual {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            html {
+                font-size: 14px;
+            }
             .nav-links {
                 display: none;
             }
-
-            .mobile-menu-btn {
+            .mobile-toggle {
                 display: block;
             }
-
-            .hero {
-                padding-top: 100px;
-            }
-
-            .hero-logo {
-                max-width: 300px;
-            }
-
-            .install-command {
+            .nav-links.open {
+                display: flex;
                 flex-direction: column;
-            }
-
-            .install-command code {
-                font-size: 0.75rem;
-                word-break: break-all;
-            }
-
-            .quickstart-step {
-                flex-direction: column;
-            }
-
-            .architecture {
-                padding: 24px;
-            }
-
-            .footer-content {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .warning-callout {
-                flex-direction: column;
-                text-align: center;
-                padding: 24px;
-            }
-
-            .trust-strip {
+                position: absolute;
+                top: 56px;
+                left: 0;
+                right: 0;
+                background: var(--bg-secondary);
+                border-bottom: 1px solid var(--border);
+                padding: 16px 24px;
                 gap: 16px;
             }
+            .hero {
+                padding: 110px 0 60px;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .problem-grid,
+            .solution-grid,
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .compat-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .section {
+                padding: 60px 0;
+            }
+            .install-box {
+                flex-direction: column;
+                gap: 8px;
+                width: 100%;
+                max-width: 400px;
+            }
+            .step {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
         }
 
-.quickstart-note {
-    max-width: 800px;
-    margin: 48px auto 0;
-    background: rgba(0, 212, 255, 0.08);
-	    border: 1px solid rgba(0, 212, 255, 0.6);
-    border-radius: 12px;
-    padding: 24px 28px;
-}
-
-.quickstart-note p {
-    color: var(--text-secondary);
-    margin-bottom: 16px;
-}
-
-.quickstart-note p:last-child {
-    margin-bottom: 0;
-    color: var(--cyan-primary);
-    font-family: 'Titillium Web', sans-serif;
-    font-weight: 600;
-}
-
-.quickstart-note pre {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 16px;
-    overflow-x: auto;
-}
-
-.quickstart-note code {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.85rem;
-    color: var(--cyan-primary);
-}
-
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        /* Subtle entrance animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
         }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg-dark);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-muted);
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
-    <!-- Background effects -->
-    <div class="bg-grid"></div>
-    <div class="bg-glow bg-glow-1"></div>
-    <div class="bg-glow bg-glow-2"></div>
-    <div class="bg-glow bg-glow-3"></div>
 
-    <!-- SVG Icon Definitions -->
-    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-        <!-- Lobster/Claw icon -->
-        <symbol id="icon-claw" viewBox="0 0 24 24" fill="none" stroke="#e63946" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 3L5 7v4l4 4"/>
-            <path d="M15 3l4 4v4l-4 4"/>
-            <path d="M5 11c0 4 3 7 7 10 4-3 7-6 7-10"/>
-            <circle cx="8" cy="8" r="1" fill="#e63946"/>
-            <circle cx="16" cy="8" r="1" fill="#e63946"/>
-        </symbol>
+<!-- NAV -->
+<nav class="nav">
+    <div class="nav-inner">
+        <a href="#" class="nav-brand">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            ClawGate
+        </a>
+        <button class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <ul class="nav-links">
+            <li><a href="https://github.com/M64GitHub/clawgate/tree/master/docs">Docs</a></li>
+            <li><a href="#solution">Solution</a></li>
+            <li><a href="#quickstart">Quick Start</a></li>
+            <li><a href="#security">Security</a></li>
+            <li><a href="#features">Features</a></li>
+            <li>
+                <a href="https://github.com/M64GitHub/clawgate" class="nav-cta">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    GitHub
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
 
-        <!-- Folder icon -->
-        <symbol id="icon-folder" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
-        </symbol>
-
-        <!-- Key icon -->
-        <symbol id="icon-key" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="7.5" cy="15.5" r="5"/>
-            <path d="m21 2-9.6 9.6"/>
-            <path d="m15.5 7.5 3 3L22 7l-3-3"/>
-        </symbol>
-
-        <!-- Clipboard icon -->
-        <symbol id="icon-clipboard" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
-            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
-            <path d="M12 11h4"/>
-            <path d="M12 16h4"/>
-            <path d="M8 11h.01"/>
-            <path d="M8 16h.01"/>
-        </symbol>
-
-        <!-- Cloud icon -->
-        <symbol id="icon-cloud" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
-        </symbol>
-
-        <!-- Shield Lock icon -->
-        <symbol id="icon-shield-lock" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            <rect x="9" y="10" width="6" height="6" rx="1"/>
-            <path d="M12 10V8a2 2 0 0 0-2-2 2 2 0 0 0-2 2v2"/>
-        </symbol>
-
-        <!-- Target icon -->
-        <symbol id="icon-target" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <circle cx="12" cy="12" r="6"/>
-            <circle cx="12" cy="12" r="2"/>
-        </symbol>
-
-        <!-- Clock icon -->
-        <symbol id="icon-clock" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <polyline points="12 6 12 12 16 14"/>
-        </symbol>
-
-        <!-- Document/Audit icon -->
-        <symbol id="icon-audit" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-            <polyline points="14 2 14 8 20 8"/>
-            <line x1="16" y1="13" x2="8" y2="13"/>
-            <line x1="16" y1="17" x2="8" y2="17"/>
-            <line x1="10" y1="9" x2="8" y2="9"/>
-        </symbol>
-
-        <!-- Lock icon -->
-        <symbol id="icon-lock" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-        </symbol>
-
-        <!-- Signature/Pen icon -->
-        <symbol id="icon-signature" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
-            <path d="m15 5 4 4"/>
-        </symbol>
-
-        <!-- Forbidden/Block icon -->
-        <symbol id="icon-forbidden" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="m4.9 4.9 14.2 14.2"/>
-        </symbol>
-
-        <!-- Hot/Fire icon -->
-        <symbol id="icon-hot" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
-        </symbol>
-
-        <!-- Refresh/Reconnect icon -->
-        <symbol id="icon-refresh" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-            <path d="M3 3v5h5"/>
-            <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
-            <path d="M16 16h5v5"/>
-        </symbol>
-
-        <!-- Bolt/Lightning icon -->
-        <symbol id="icon-bolt" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-        </symbol>
-
-        <!-- Forward secrecy / Key exchange icon -->
-        <symbol id="icon-key-exchange" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M7 16V4m0 0L3 8m4-4l4 4"/>
-            <path d="M17 8v12m0 0l4-4m-4 4l-4-4"/>
-            <circle cx="7" cy="18" r="2"/>
-            <circle cx="17" cy="6" r="2"/>
-        </symbol>
-
-        <!-- Auth/Check shield icon -->
-        <symbol id="icon-auth" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            <path d="m9 12 2 2 4-4"/>
-        </symbol>
-
-        <!-- Path/Route icon -->
-        <symbol id="icon-path" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="6" cy="6" r="3"/>
-            <circle cx="18" cy="18" r="3"/>
-            <path d="M6 9v6c0 1.1.9 2 2 2h8"/>
-        </symbol>
-
-        <!-- Warning/Alert icon -->
-        <symbol id="icon-warning" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 9v4"/>
-            <path d="M12 17h.01"/>
-        </symbol>
-
-        <!-- Code icon -->
-        <symbol id="icon-code" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="16 18 22 12 16 6"/>
-            <polyline points="8 6 2 12 8 18"/>
-        </symbol>
-
-        <!-- Terminal icon -->
-        <symbol id="icon-terminal" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="4 17 10 11 4 5"/>
-            <line x1="12" y1="19" x2="20" y2="19"/>
-        </symbol>
-
-        <!-- Cursor/Pointer icon -->
-        <symbol id="icon-cursor" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 3l14 9-7 1 4 8-3 1-4-8-4 5V3z"/>
-        </symbol>
-
-        <!-- Diamond icon -->
-        <symbol id="icon-diamond" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2L2 12l10 10 10-10L12 2z"/>
-        </symbol>
-
-        <!-- Hexagon icon -->
-        <symbol id="icon-hexagon" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-        </symbol>
-
-        <!-- GitHub icon -->
-        <symbol id="icon-github" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-        </symbol>
-
-        <!-- Check icon (small) -->
-        <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"/>
-        </symbol>
-    </svg>
-
-    <!-- Navigation -->
-    <nav>
-        <div class="container">
-            <a href="#" class="nav-logo">
-                <svg><use href="#icon-claw"/></svg>
-                <span>Claw</span>Gate
-            </a>
-            <ul class="nav-links">
-<li><a href="https://github.com/M64GitHub/clawgate/tree/master/docs" target="_blank">Docs</a></li>
-                <li><a href="#solution">Solution</a></li>
-                <li><a href="#quickstart">Quick Start</a></li>
-                <li><a href="#security">Security</a></li>
-                <li><a href="#features">Features</a></li>
-            </ul>
-            <a href="https://github.com/M64GitHub/clawgate" class="nav-github" target="_blank">
-                <svg width="20" height="20"><use href="#icon-github"/></svg>
-                View on GitHub
-            </a>
-            <button class="mobile-menu-btn">☰</button>
+<!-- HERO -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Zero-trust file access for AI agents
         </div>
-    </nav>
 
-    <!-- Hero -->
-    <section class="hero">
+        <h1>Secure Files &amp; Git for AI Agents</h1>
 
-        <h1 class="hero-title">Secure Files & Git for AI Agents</h1>
-			<p class="hero-subtitle">Give your AI agent scoped, time-limited, audited file and git access - without exposing your filesystem.<br />
-				<strong>Assume the agent machine is compromised.</strong><br /> End-to-end encrypted. Capability-based. No full filesystem access.</p>
-        
+        <p class="hero-desc">
+            Give your AI agent scoped, time-limited, audited file and git access - without exposing your filesystem.
+            <strong>Assume the agent machine is compromised.</strong>
+        </p>
+
         <div class="install-box">
-            <p class="install-label">Install one-liner</p>
-            <div class="install-command">
-                <code id="install-code">curl -sSL https://clawgate.io/install.sh | sh</code>
-                <button class="copy-btn" onclick="copyInstall()">Copy</button>
-            </div>
+            <code><span class="prompt">$</span> curl -sSL https://clawgate.io/install.sh | sh</code>
+            <button class="copy-btn" onclick="copyInstall(this)">Copy</button>
         </div>
 
-        <!-- Trust Strip -->
-        <div class="trust-strip">
-            <div class="trust-item">
-                <svg><use href="#icon-check"/></svg>
+        <div class="hero-features">
+            <span class="hero-feature">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                 E2E encrypted
-            </div>
-            <div class="trust-item">
-                <svg><use href="#icon-check"/></svg>
+            </span>
+            <span class="hero-feature">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                 Signed tokens
-            </div>
-            <div class="trust-item">
-                <svg><use href="#icon-check"/></svg>
-                No full FS
-            </div>
-            <div class="trust-item">
-                <svg><use href="#icon-check"/></svg>
-                Audit log
-            </div>
+            </span>
+            <span class="hero-feature">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                No full FS access
+            </span>
+            <span class="hero-feature">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Full audit log
+            </span>
         </div>
 
         <div class="hero-badges">
-            <a href="https://github.com/M64GitHub/clawgate/releases"><img src="https://img.shields.io/github/v/release/M64GitHub/clawgate?include_prereleases" alt="Release"></a>
-            <a href="https://github.com/M64GitHub/clawgate/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License"></a>
-            <img src="https://img.shields.io/badge/Zig-0.16+-f7a41d?logo=zig&logoColor=white" alt="Zig">
-        </div>
-    </section>
-
-    <!-- Problem (moved UP - right after Hero) -->
-    <section id="problem">
-        <div class="container">
-            <div class="section-header">
-                <p class="section-label">The Challenge</p>
-                <h2 class="section-title">AI Agents Need Your Files</h2>
-                <p class="section-subtitle">You're running OpenClaw, Claude Code, or any AI on an isolated machine. Smart. But now it needs to read your code...</p>
-            </div>
-            <div class="problem-grid">
-                <div class="problem-card">
-                    <div class="problem-card-icon">
-                        <svg><use href="#icon-folder"/></svg>
-                    </div>
-                    <h3>NFS / SMB Mount</h3>
-                    <p>Full filesystem access. Agent gets pwned → you get pwned.</p>
-                </div>
-                <div class="problem-card">
-                    <div class="problem-card-icon">
-                        <svg><use href="#icon-key"/></svg>
-                    </div>
-                    <h3>SSH + rsync</h3>
-                    <p>Credentials stored on agent machine. Same problem.</p>
-                </div>
-                <div class="problem-card">
-                    <div class="problem-card-icon">
-                        <svg><use href="#icon-clipboard"/></svg>
-                    </div>
-                    <h3>Manual Copy</h3>
-                    <p>Tedious. Breaks flow. Doesn't scale.</p>
-                </div>
-                <div class="problem-card">
-                    <div class="problem-card-icon">
-                        <svg><use href="#icon-cloud"/></svg>
-                    </div>
-                    <h3>Cloud Sync</h3>
-                    <p>Your code on someone else's servers.</p>
-                </div>
-            </div>
-            
-            <!-- Warning Callout -->
-            <div class="warning-callout">
-                <div class="warning-icon">
-                    <svg><use href="#icon-warning"/></svg>
-                </div>
-                <div class="warning-content">
-                    <strong>None of these assume the agent might be compromised.</strong>
-                    <span>But it might be - prompt injection is real.</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Solution -->
-    <section class="solution-section" id="solution">
-        <div class="container">
-            <div class="section-header">
-                <p class="section-label">The Answer</p>
-                <h2 class="section-title">Capability-Based Access</h2>
-                <p class="section-subtitle">Grant specific paths, specific operations, for specific time. Nothing more.</p>
-            </div>
-            <div class="solution-grid">
-                <div class="solution-card">
-                    <div class="solution-icon">
-                        <svg><use href="#icon-shield-lock"/></svg>
-                    </div>
-                    <h3>Zero Trust</h3>
-                    <p>Assumes the agent machine is compromised. Because it might be.</p>
-                </div>
-                <div class="solution-card">
-                    <div class="solution-icon">
-                        <svg><use href="#icon-target"/></svg>
-                    </div>
-                    <h3>Least Privilege</h3>
-                    <p>Grant <code>~/projects/app/**</code> not "everything". Scoped access.</p>
-                </div>
-                <div class="solution-card">
-                    <div class="solution-icon">
-                        <svg><use href="#icon-clock"/></svg>
-                    </div>
-                    <h3>Time-Bounded</h3>
-                    <p>Tokens expire. 1 hour, 24 hours, 7 days - you choose.</p>
-                </div>
-                <div class="solution-card">
-                    <div class="solution-icon">
-                        <svg><use href="#icon-audit"/></svg>
-                    </div>
-                    <h3>Full Audit</h3>
-                    <p>Every operation logged with path, timestamp, and result.</p>
-                </div>
-            </div>
-
-            <!-- Architecture diagram -->
-            <div class="architecture">
-                <img src="architecture.svg" alt="ClawGate Architecture" style="width: 100%; max-width: 900px;">
-            </div>
-        </div>
-    </section>
-
-    <!-- Quick Start (moved UP - right after Solution) -->
-    <section id="quickstart">
-        <div class="container">
-            <div class="section-header">
-                <p class="section-label">Get Started</p>
-                <h2 class="section-title">Up and Running in 60 Seconds</h2>
-            </div>
-            <div class="quickstart-steps">
-
-<div class="quickstart-step">
-    <div class="step-number">1</div>
-    <div class="step-content">
-        <h3>Generate Keys & Grant Access</h3>
-        <p>On your primary machine (laptop/workstation)</p>
-        <pre><code>clawgate keygen
-clawgate grant --read "~/projects/**" --ttl 24h > token.txt
-# Or with git access:
-clawgate grant --git "~/projects/**" --ttl 24h > token.txt</code></pre>
-    </div>
-</div>
-<div class="quickstart-step">
-    <div class="step-number">2</div>
-    <div class="step-content">
-        <h3>Copy to Agent Machine</h3>
-        <p>Send the token and your public key to the isolated machine</p>
-        <pre><code>scp ~/.clawgate/public.key token.txt agent-machine:</code></pre>
-    </div>
-</div>
-<div class="quickstart-step">
-    <div class="step-number">3</div>
-    <div class="step-content">
-        <h3>Start Agent</h3>
-        <p>On the isolated machine (Mac Mini, VPS, container)</p>
-        <pre><code>mkdir -p ~/.clawgate/keys
-mv public.key ~/.clawgate/keys/
-clawgate token add "$(cat token.txt)"
-clawgate --mode agent</code></pre>
-    </div>
-</div>
-<div class="quickstart-step">
-    <div class="step-number">4</div>
-    <div class="step-content">
-        <h3>Connect</h3>
-        <p>Back on your primary machine</p>
-        <pre><code>clawgate --mode resource --connect &lt;agent-ip&gt;:4223</code></pre>
-    </div>
-</div>
-
-
-<div class="quickstart-note">
-    <p><strong>That's it!</strong> Steps 1-3 are one-time setup. After that, just create new tokens anytime:</p>
-    <pre><code># On laptop - grant new access
-clawgate grant --write "~/projects/new-app/**" --ttl 1h > token.txt
-scp token.txt agent-machine:
-
-# On agent - add without restart
-clawgate token add "$(cat token.txt)"</code></pre>
-    <p>Tokens hot-reload. No restart needed.</p>
-</div>
-
-
-
-
-            </div>
-
-
-
-
-        </div>
-    </section>
-
-    <!-- Works With (moved UP - after Quickstart) -->
-    <section id="agents">
-        <div class="container">
-            <div class="section-header">
-                <p class="section-label">Compatibility</p>
-                <h2 class="section-title">Works With Any Agent</h2>
-                <p class="section-subtitle">Skill files for CLI-based agents. MCP server for tool-based agents.</p>
-            </div>
-            <div class="works-with-grid">
-                <div class="works-with-card">
-                    <div class="works-with-icon">
-                        <svg><use href="#icon-claw"/></svg>
-                    </div>
-                    <h3>OpenClaw</h3>
-                    <p>Skill file (CLI)</p>
-                </div>
-                <div class="works-with-card">
-                    <div class="works-with-icon">
-                        <svg><use href="#icon-code"/></svg>
-                    </div>
-                    <h3>Claude Code</h3>
-                    <p>Skill file + MCP</p>
-                </div>
-                <div class="works-with-card">
-                    <div class="works-with-icon">
-                        <svg><use href="#icon-cursor"/></svg>
-                    </div>
-                    <h3>Cursor</h3>
-                    <p>MCP server</p>
-                </div>
-                <div class="works-with-card">
-                    <div class="works-with-icon">
-                        <svg><use href="#icon-diamond"/></svg>
-                    </div>
-                    <h3>OpenCode</h3>
-                    <p>Skill file + MCP</p>
-                </div>
-                <div class="works-with-card">
-                    <div class="works-with-icon">
-                        <svg><use href="#icon-hexagon"/></svg>
-                    </div>
-                    <h3>Codex</h3>
-                    <p>Skill file + MCP</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Security (moved UP - before Features) -->
-    <section class="security-section" id="security">
-        <div class="container">
-            <div class="section-header">
-                <p class="section-label">Defense in Depth</p>
-                <h2 class="section-title">Security Model</h2>
-                <p class="section-subtitle">Multiple layers of protection. Assume breach at every layer.</p>
-            </div>
-            <table class="security-table">
-                <thead>
-                    <tr>
-                        <th>Layer</th>
-                        <th>Protection</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><svg><use href="#icon-lock"/></svg> Transport</td>
-                        <td>X25519 + XChaCha20-Poly1305 end-to-end encryption</td>
-                    </tr>
-                    <tr>
-                        <td><svg><use href="#icon-key-exchange"/></svg> Forward Secrecy</td>
-                        <td>Fresh ephemeral keys per session</td>
-                    </tr>
-                    <tr>
-                        <td><svg><use href="#icon-signature"/></svg> Authentication</td>
-                        <td>Ed25519 signed JWT capability tokens</td>
-                    </tr>
-                    <tr>
-                        <td><svg><use href="#icon-target"/></svg> Authorization</td>
-                        <td>Per-request path scope validation</td>
-                    </tr>
-                    <tr>
-                        <td><svg><use href="#icon-path"/></svg> Path Safety</td>
-                        <td>Canonicalization, symlink rejection, traversal protection</td>
-                    </tr>
-                    <tr>
-                        <td><svg><use href="#icon-forbidden"/></svg> Forbidden Paths</td>
-                        <td>~/.ssh, ~/.aws, ~/.gnupg - hardcoded, ungrantable</td>
-                    </tr>
-                    <tr>
-                        <td><svg><use href="#icon-terminal"/></svg> Git Allowlists</td>
-                        <td>Three-tier command allowlists, blocked flags (-c, --exec)</td>
-                    </tr>
-                    <tr>
-                        <td><svg><use href="#icon-clock"/></svg> Time Limits</td>
-                        <td>Tokens expire, limiting blast radius</td>
-                    </tr>
-                    <tr>
-                        <td><svg><use href="#icon-audit"/></svg> Audit Trail</td>
-                        <td>Every operation logged locally</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    <!-- Features (renamed label) -->
-    <section id="features">
-        <div class="container">
-            <div class="section-header">
-                <p class="section-label">Security Guarantees</p>
-                <h2 class="section-title">Features</h2>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg><use href="#icon-lock"/></svg>
-                    </div>
-                    <div class="feature-content">
-                        <h3>E2E Encryption</h3>
-                        <p>X25519 key exchange + XChaCha20-Poly1305. Forward secrecy per session.</p>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg><use href="#icon-signature"/></svg>
-                    </div>
-                    <div class="feature-content">
-                        <h3>Ed25519 Signed Tokens</h3>
-                        <p>Unforgeable capability tokens. Self-contained, no database needed.</p>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg><use href="#icon-forbidden"/></svg>
-                    </div>
-                    <div class="feature-content">
-                        <h3>Forbidden Paths</h3>
-                        <p><code>~/.ssh</code>, <code>~/.aws</code>, <code>~/.gnupg</code> - hardcoded blocked. Always.</p>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg><use href="#icon-hot"/></svg>
-                    </div>
-                    <div class="feature-content">
-                        <h3>Hot Token Reload</h3>
-                        <p>Add tokens while running. No restarts. No reconnects.</p>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg><use href="#icon-refresh"/></svg>
-                    </div>
-                    <div class="feature-content">
-                        <h3>Auto Reconnect</h3>
-                        <p>Connection drops? Reconnects automatically. Seamless.</p>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg><use href="#icon-terminal"/></svg>
-                    </div>
-                    <div class="feature-content">
-                        <h3>Git Operations</h3>
-                        <p>Three permission tiers: read-only, write, full. Command allowlists block dangerous flags.</p>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg><use href="#icon-bolt"/></svg>
-                    </div>
-                    <div class="feature-content">
-                        <h3>Pure Zig, Zero Deps</h3>
-                        <p>Single binary. No runtime. No supply chain risk.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-<section id="demo">
-    <div class="container">
-        <div class="section-header">
-            <p class="section-label">See it in action</p>
-            <h2 class="section-title">Real Usage</h2>
-            <p class="section-subtitle">AI agent reads files remotely. Every access logged.</p>
-        </div>
-        <div class="demo-image">
-            <img src="demo-interaction.png" alt="ClawGate in action - AI reading files with audit trail">
-        </div>
-			</div>
-
-    <div class="container">
-        <div class="section-header">
-					<p style="margin-bottom: 25px;">&nbsp;</p>
-            <p class="section-label">Even easier - no ssh</p>
-            <h2 class="section-title">Send Token in Telegram</h2>
-            <p class="section-subtitle">AI agent applies token</p>
-        </div>
-        <div class="demo-image">
-            <img src="example2.png" alt="ClawGate in action - AI reading files with audit trail">
-        </div>
-        <div class="demo-image">
-            <img src="example2-shell.png" alt="ClawGate in action - AI reading files with audit trail">
+            <a href="https://github.com/M64GitHub/clawgate/releases"><img src="https://img.shields.io/github/v/release/M64GitHub/clawgate?include_prereleases&style=flat-square&color=e07a3a" alt="Release"></a>
+            <a href="https://github.com/M64GitHub/clawgate/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-e07a3a?style=flat-square" alt="License"></a>
+            <a href="https://ziglang.org"><img src="https://img.shields.io/badge/Zig-0.16+-f7a41d?style=flat-square&logo=zig&logoColor=white" alt="Zig"></a>
         </div>
     </div>
 </section>
 
-    <!-- CTA -->
-    <section class="cta-section">
-        <div class="container">
-            <h2 class="cta-title">Ready to Secure Your AI Agent?</h2>
-            <p class="cta-subtitle">Stop exposing your entire filesystem. Start using capability-based access.</p>
-            <div class="cta-buttons">
-                <a href="https://github.com/M64GitHub/clawgate" class="btn btn-primary" target="_blank">
-                    <svg width="20" height="20"><use href="#icon-github"/></svg>
-                    View on GitHub
-                </a>
-                <a href="#quickstart" class="btn btn-secondary">
-                    Quick Start →
-                </a>
+<!-- PROBLEM -->
+<section class="section" id="problem">
+    <div class="container">
+        <div class="section-header fade-in">
+            <span class="section-label">The Challenge</span>
+            <h2 class="section-title">AI Agents Need Your Files</h2>
+            <p class="section-subtitle">You're running AI on an isolated machine. Smart. But now it needs to read your code...</p>
+        </div>
+
+        <div class="problem-grid fade-in">
+            <div class="problem-card">
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                    NFS / SMB Mount
+                </h3>
+                <p>Full filesystem access. Agent gets pwned → you get pwned.</p>
+            </div>
+            <div class="problem-card">
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                    SSH + rsync
+                </h3>
+                <p>Credentials stored on agent machine. Same problem.</p>
+            </div>
+            <div class="problem-card">
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                    Manual Copy
+                </h3>
+                <p>Tedious. Breaks flow. Doesn't scale.</p>
+            </div>
+            <div class="problem-card">
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                    Cloud Sync
+                </h3>
+                <p>Your code on someone else's servers.</p>
             </div>
         </div>
-    </section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div>
-                    <div class="footer-logo">
-                        <svg><use href="#icon-claw"/></svg>
-                        <span>Claw</span>Gate
-                    </div>
-                    <p class="footer-text">Secure file & git access for the AI agent era</p>
+        <div class="problem-bottom fade-in">
+            <strong>None of these assume the agent might be compromised.</strong> But it might be - prompt injection is real.
+        </div>
+    </div>
+</section>
+
+<!-- SOLUTION -->
+<section class="section" id="solution">
+    <div class="container">
+        <div class="section-header fade-in">
+            <span class="section-label">The Answer</span>
+            <h2 class="section-title">Capability-Based Access</h2>
+            <p class="section-subtitle">Grant specific paths, specific operations, for specific time. Nothing more.</p>
+        </div>
+
+        <div class="solution-grid fade-in">
+            <div class="solution-card">
+                <div class="solution-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 </div>
-                <div class="footer-links">
-                    <a href="https://github.com/M64GitHub/clawgate" target="_blank">GitHub</a>
-                    <a href="https://github.com/M64GitHub/clawgate/blob/main/README.md" target="_blank">Docs</a>
-                    <a href="https://github.com/M64GitHub/clawgate/blob/main/LICENSE" target="_blank">MIT License</a>
+                <h3>Zero Trust</h3>
+                <p>Assumes the agent machine is compromised. Because it might be.</p>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
                 </div>
-                <p class="footer-text">Built with &lt;3 and <a href="https://ziglang.org" style="color: var(--cyan-primary);">Zig</a> by <a href="https://m64github.github.io/" style="color: var(--cyan-primary);">M64</a></p>
+                <h3>Least Privilege</h3>
+                <p>Grant <code style="font-family:var(--font-mono);font-size:0.78rem;background:var(--bg-code);padding:1px 5px;border-radius:3px">~/projects/app/**</code> not "everything".</p>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <h3>Time-Bounded</h3>
+                <p>Tokens expire. 1 hour, 24 hours, 7 days - you choose.</p>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
+                <h3>Full Audit</h3>
+                <p>Every operation logged with path, timestamp, and result.</p>
             </div>
         </div>
-    </footer>
 
-    <script>
-        function copyInstall() {
-            const code = document.getElementById('install-code').textContent;
-            navigator.clipboard.writeText(code).then(() => {
-                const btn = document.querySelector('.copy-btn');
-                btn.textContent = 'Copied!';
-                btn.classList.add('copied');
-                setTimeout(() => {
-                    btn.textContent = 'Copy';
-                    btn.classList.remove('copied');
-                }, 2000);
-            });
-        }
+        <div class="architecture-wrap fade-in">
+            <img src="architecture.svg" alt="ClawGate Architecture Diagram">
+        </div>
+    </div>
+</section>
 
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
+<!-- QUICKSTART -->
+<section class="section" id="quickstart">
+    <div class="container">
+        <div class="section-header fade-in">
+            <span class="section-label">Get Started</span>
+            <h2 class="section-title">Up and Running in 60 Seconds</h2>
+        </div>
+
+        <div class="steps fade-in">
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <h3>Generate Keys &amp; Grant Access</h3>
+                    <p class="step-desc">On your primary machine (laptop / workstation)</p>
+                    <div class="code-block"><code><span class="cmd">clawgate keygen</span>
+<span class="cmd">clawgate grant --read "~/projects/**" --ttl 24h > token.txt</span>
+<span class="comment"># Or with git access:</span>
+<span class="cmd">clawgate grant --git "~/projects/**" --ttl 24h > token.txt</span></code></div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <h3>Copy to Agent Machine</h3>
+                    <p class="step-desc">Send the token and your public key to the isolated machine</p>
+                    <div class="code-block"><code><span class="cmd">scp ~/.clawgate/public.key token.txt agent-machine:</span></code></div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <h3>Start Agent</h3>
+                    <p class="step-desc">On the isolated machine (Mac Mini, VPS, container)</p>
+                    <div class="code-block"><code><span class="cmd">mkdir -p ~/.clawgate/keys</span>
+<span class="cmd">mv public.key ~/.clawgate/keys/</span>
+<span class="cmd">clawgate token add "$(cat token.txt)"</span>
+<span class="cmd">clawgate --mode agent</span></code></div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                    <h3>Connect</h3>
+                    <p class="step-desc">Back on your primary machine</p>
+                    <div class="code-block"><code><span class="cmd">clawgate --mode resource --connect &lt;agent-ip&gt;:4223</span></code></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="step-note fade-in">
+            <strong>Steps 1–3 are one-time setup.</strong> After that, just create new tokens anytime. Tokens hot-reload - no restart needed.
+        </div>
+    </div>
+</section>
+
+<!-- COMPATIBILITY -->
+<section class="section" id="compatibility">
+    <div class="container">
+        <div class="section-header fade-in">
+            <span class="section-label">Compatibility</span>
+            <h2 class="section-title">Works With Any Agent</h2>
+            <p class="section-subtitle">Skill files for CLI-based agents. MCP server for tool-based agents.</p>
+        </div>
+
+        <div class="compat-grid fade-in">
+            <div class="compat-card">
+                <div class="compat-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+                <h3>OpenClaw</h3>
+                <p>Skill file (CLI)</p>
+            </div>
+            <div class="compat-card">
+                <div class="compat-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+                <h3>Claude Code</h3>
+                <p>Skill file + MCP</p>
+            </div>
+            <div class="compat-card">
+                <div class="compat-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+                <h3>Cursor</h3>
+                <p>MCP server</p>
+            </div>
+            <div class="compat-card">
+                <div class="compat-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+                <h3>OpenCode</h3>
+                <p>Skill file + MCP</p>
+            </div>
+            <div class="compat-card">
+                <div class="compat-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+                <h3>Codex</h3>
+                <p>Skill file + MCP</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECURITY -->
+<section class="section" id="security">
+    <div class="container">
+        <div class="section-header fade-in">
+            <span class="section-label">Defense in Depth</span>
+            <h2 class="section-title">Security Model</h2>
+            <p class="section-subtitle">Multiple layers of protection. Assume breach at every layer.</p>
+        </div>
+
+        <div class="security-table-wrap fade-in">
+            <table class="security-table">
+                <thead>
+                    <tr><th>Layer</th><th>Protection</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Transport</td><td>X25519 + XChaCha20-Poly1305 end-to-end encryption</td></tr>
+                    <tr><td>Forward Secrecy</td><td>Fresh ephemeral keys per session</td></tr>
+                    <tr><td>Authentication</td><td>Ed25519 signed JWT capability tokens</td></tr>
+                    <tr><td>Authorization</td><td>Per-request path scope validation</td></tr>
+                    <tr><td>Path Safety</td><td>Canonicalization, symlink rejection, traversal protection</td></tr>
+                    <tr><td>Forbidden Paths</td><td>~/.ssh, ~/.aws, ~/.gnupg - hardcoded, ungrantable</td></tr>
+                    <tr><td>Git Allowlists</td><td>Three-tier command allowlists, blocked flags (-c, --exec)</td></tr>
+                    <tr><td>Time Limits</td><td>Tokens expire, limiting blast radius</td></tr>
+                    <tr><td>Audit Trail</td><td>Every operation logged locally</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+    <div class="container">
+        <div class="section-header fade-in">
+            <span class="section-label">Capabilities</span>
+            <h2 class="section-title">Features</h2>
+        </div>
+
+        <div class="features-grid fade-in">
+            <div class="feature-card">
+                <h3>E2E Encryption</h3>
+                <p>X25519 key exchange + XChaCha20-Poly1305. Forward secrecy per session.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Ed25519 Signed Tokens</h3>
+                <p>Unforgeable capability tokens. Self-contained, no database needed.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Forbidden Paths</h3>
+                <p><code style="font-family:var(--font-mono);font-size:0.78rem;background:var(--bg-code);padding:1px 5px;border-radius:3px">~/.ssh</code>, <code style="font-family:var(--font-mono);font-size:0.78rem;background:var(--bg-code);padding:1px 5px;border-radius:3px">~/.aws</code>, <code style="font-family:var(--font-mono);font-size:0.78rem;background:var(--bg-code);padding:1px 5px;border-radius:3px">~/.gnupg</code> - hardcoded blocked. Always.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Hot Token Reload</h3>
+                <p>Add tokens while running. No restarts. No reconnects.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Auto Reconnect</h3>
+                <p>Connection drops? Reconnects automatically. Seamless.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Git Operations</h3>
+                <p>Three permission tiers: read-only, write, full. Command allowlists block dangerous flags.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Pure Zig, Zero Deps</h3>
+                <p>Single binary. No runtime. No supply chain risk.</p>
+            </div>
+            <div class="feature-card">
+                <h3>MCP Server</h3>
+                <p>Native MCP integration for tool-based agents like Cursor and Claude Code.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Skill Files</h3>
+                <p>Drop-in skill files for CLI agents. OpenClaw, Claude Code, OpenCode compatible.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DEMO -->
+<section class="section" id="demo">
+    <div class="container">
+        <div class="section-header fade-in">
+            <span class="section-label">See It in Action</span>
+            <h2 class="section-title">Real Usage</h2>
+            <p class="section-subtitle">AI agent reads files remotely. Every access logged.</p>
+        </div>
+
+
+        <div class="demo-group fade-in">
+            <div class="demo-dual">
+                <div class="demo-image">
+                    <img src="demo-interaction.png" alt="Sending token via Telegram">
+                </div>
+                <div class="demo-image">
+                    <img src="demo-interaction2.png" alt="Agent applying the token">
+                </div>
+            </div>
+	</div>
+
+
+
+        <div class="demo-group fade-in">
+            <div class="demo-group-title">Even easier - send a token via Telegram</div>
+            <div class="demo-dual">
+                <div class="demo-image">
+                    <img src="example2.png" alt="Sending token via Telegram">
+                </div>
+                <div class="demo-image">
+                    <img src="example2-shell.png" alt="Agent applying the token">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+    <div class="container fade-in">
+        <h2>Ready to Secure Your AI Agent?</h2>
+        <p>Stop exposing your entire filesystem. Start using capability-based access.</p>
+        <div class="cta-buttons">
+            <a href="https://github.com/M64GitHub/clawgate" class="btn-primary">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                View on GitHub
+            </a>
+            <a href="#quickstart" class="btn-secondary">Quick Start →</a>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-inner">
+            <div class="footer-left">
+                <span class="footer-brand">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    ClawGate
+                </span>
+                <ul class="footer-links">
+                    <li><a href="https://github.com/M64GitHub/clawgate">GitHub</a></li>
+                    <li><a href="https://github.com/M64GitHub/clawgate/tree/master/docs">Docs</a></li>
+                    <li><a href="https://github.com/M64GitHub/clawgate/blob/main/LICENSE">MIT License</a></li>
+                </ul>
+            </div>
+            <div class="footer-right">
+                Built with <a href="https://ziglang.org">Zig</a> by <a href="https://m64github.github.io/">M64</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    function copyInstall(btn) {
+        navigator.clipboard.writeText('curl -sSL https://clawgate.io/install.sh | sh');
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+            btn.textContent = 'Copy';
+            btn.classList.remove('copied');
+        }, 2000);
+    }
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         });
-    </script>
+    });
+
+    // Fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
 </body>
 </html>
