@@ -4,7 +4,7 @@
 
 set -e
 
-VERSION="${CLAWGATE_VERSION:-0.3.0}"
+VERSION="${CLAWGATE_VERSION:-0.3.1}"
 INSTALL_DIR="${CLAWGATE_INSTALL_DIR:-/usr/local/bin}"
 
 # Detect OS
@@ -58,7 +58,7 @@ echo "  clawgate token add \"\$(cat token.txt)\""
 echo "  clawgate --mode agent"
 echo ""
 echo "Then connect from laptop:"
-echo "  clawgate --mode resource --connect <agent-ip>:4223"
+echo "  clawgate --mode resource --connect <agent-ip>:53280"
 echo "---"
 echo ""
 echo "Steps 1-3 are one-time setup. After that, add new tokens anytime:"

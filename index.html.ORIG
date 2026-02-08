@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClawGate - Secure Capability Proxy for AI Agents</title>
+    <meta name="description" content="Give your isolated AI agent scoped, time-limited, audited access to files, git, and custom tools. Zero trust. End-to-end encrypted. Capability-based.">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="ClawGate - Secure Capability Proxy for AI Agents">
+    <meta property="og:description" content="Zero-trust capability proxy for isolated AI agents. Scoped access to files, git, and tools. E2E encrypted, audited, revocable.">
+    <meta property="og:url" content="https://clawgate.io">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ClawGate - Secure Capability Proxy for AI Agents">
+    <meta name="twitter:description" content="Zero-trust capability proxy for isolated AI agents. Scoped access to files, git, and tools. E2E encrypted, audited, revocable.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f1117;
+            --bg-secondary: #161922;
+            --bg-tertiary: #1c1f2b;
+            --bg-card: #1a1d28;
+            --bg-card-hover: #1f2330;
+            --bg-code: #12141c;
+
+            --text-primary: #e8eaf0;
+            --text-secondary: #9ca3b4;
+            --text-muted: #6b7280;
+            --text-heading: #f0f2f7;
+
+            --accent: #e07a3a;
+            --accent-dim: rgba(224, 122, 58, 0.12);
+            --accent-border: rgba(224, 122, 58, 0.25);
+            --accent-glow: rgba(224, 122, 58, 0.06);
+
+            --green: #34d399;
+            --green-dim: rgba(52, 211, 153, 0.1);
+            --red: #f87171;
+            --red-dim: rgba(248, 113, 113, 0.08);
+            --yellow: #fbbf24;
+            --blue: #60a5fa;
+
+            --border: rgba(255, 255, 255, 0.06);
+            --border-strong: rgba(255, 255, 255, 0.1);
+
+            --radius: 8px;
+            --radius-lg: 12px;
+
+            --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 15px;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.65;
+        }
+
+        ::selection {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+        a:hover {
+            color: #f0935a;
+        }
+
+        /* ========== NAV ========== */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(15, 17, 23, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: var(--text-heading);
+            letter-spacing: -0.01em;
+        }
+        .nav-brand svg {
+            width: 22px;
+            height: 22px;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--text-secondary);
+            font-size: 0.87rem;
+            font-weight: 450;
+            transition: color 0.15s;
+        }
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+        .nav-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: transparent;
+            border: 1px solid var(--border-strong);
+            border-radius: 6px;
+            color: var(--text-secondary) !important;
+            font-size: 0.83rem;
+            font-weight: 500;
+            transition: all 0.15s;
+        }
+        .nav-cta:hover {
+            background: rgba(255,255,255,0.04);
+            color: var(--text-primary) !important;
+            border-color: rgba(255,255,255,0.15);
+        }
+        .nav-cta svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        /* ========== LAYOUT ========== */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        .section {
+            padding: 80px 0;
+        }
+        .section + .section {
+            border-top: 1px solid var(--border);
+        }
+        .section-label {
+            display: inline-block;
+            font-size: 0.73rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            letter-spacing: -0.025em;
+            line-height: 1.25;
+            margin-bottom: 10px;
+        }
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            max-width: 560px;
+            line-height: 1.6;
+        }
+        .section-header {
+            margin-bottom: 48px;
+        }
+
+        /* ========== HERO ========== */
+        .hero {
+            padding: 140px 0 80px;
+            text-align: center;
+            position: relative;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 400px;
+            background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 14px;
+            background: var(--accent-dim);
+            border: 1px solid var(--accent-border);
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--accent);
+            margin-bottom: 28px;
+        }
+        .hero-badge svg {
+            width: 14px;
+            height: 14px;
+        }
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            color: var(--text-heading);
+            letter-spacing: -0.035em;
+            line-height: 1.15;
+            margin-bottom: 18px;
+            max-width: 720px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .hero-desc {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            max-width: 580px;
+            margin: 0 auto 36px;
+            line-height: 1.6;
+        }
+        .hero-desc strong {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Install box */
+        .install-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-code);
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius);
+            padding: 12px 16px;
+            margin-bottom: 32px;
+            max-width: 100%;
+        }
+        .install-box code {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow-x: auto;
+        }
+        .install-box .prompt {
+            color: var(--accent);
+            user-select: none;
+        }
+        .copy-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+        .copy-btn:hover {
+            color: var(--text-primary);
+            border-color: var(--border-strong);
+            background: rgba(255,255,255,0.03);
+        }
+        .copy-btn.copied {
+            color: var(--green);
+            border-color: rgba(52, 211, 153, 0.25);
+        }
+
+        /* Feature pills */
+        .hero-features {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+        .hero-feature {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            font-weight: 450;
+        }
+        .hero-feature svg {
+            width: 15px;
+            height: 15px;
+            color: var(--green);
+            flex-shrink: 0;
+        }
+
+        /* Badges */
+        .hero-badges {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .hero-badges img {
+            height: 20px;
+        }
+
+        /* ========== PROBLEM ========== */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-top: 32px;
+        }
+        .problem-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+        }
+        .problem-card h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .problem-card h3 svg {
+            width: 14px;
+            height: 14px;
+            color: var(--red);
+        }
+        .problem-card p {
+            font-size: 0.83rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+        }
+        .problem-bottom {
+            margin-top: 24px;
+            padding: 16px 20px;
+            background: var(--red-dim);
+            border: 1px solid rgba(248, 113, 113, 0.12);
+            border-radius: var(--radius);
+            font-size: 0.87rem;
+            color: var(--text-secondary);
+        }
+        .problem-bottom strong {
+            color: var(--red);
+            font-weight: 600;
+        }
+
+        /* ========== SOLUTION ========== */
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+        .solution-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            transition: border-color 0.2s;
+        }
+        .solution-card:hover {
+            border-color: var(--accent-border);
+        }
+        .solution-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-dim);
+            border-radius: 8px;
+            margin-bottom: 14px;
+            color: var(--accent);
+        }
+        .solution-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+        .solution-card h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-bottom: 6px;
+        }
+        .solution-card p {
+            font-size: 0.83rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+        }
+
+        /* ========== ARCHITECTURE ========== */
+        .architecture-wrap {
+            margin-top: 40px;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            overflow-x: auto;
+        }
+        .architecture-wrap img {
+            width: 100%;
+            max-width: 800px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* ========== QUICKSTART ========== */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .step {
+            display: grid;
+            grid-template-columns: 40px 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+        .step-num {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-dim);
+            border: 1px solid var(--accent-border);
+            border-radius: 50%;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .step-content h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-bottom: 4px;
+        }
+        .step-content .step-desc {
+            font-size: 0.83rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+        .code-block {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+        .code-block .comment {
+            color: var(--text-muted);
+        }
+        .code-block .cmd {
+            color: var(--text-primary);
+        }
+        .step-note {
+            margin-top: 20px;
+            padding: 14px 18px;
+            background: var(--accent-dim);
+            border: 1px solid var(--accent-border);
+            border-radius: var(--radius);
+            font-size: 0.83rem;
+            color: var(--text-secondary);
+        }
+        .step-note strong {
+            color: var(--accent);
+        }
+
+        /* ========== WORKS WITH ========== */
+        .compat-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+        .compat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+        .compat-card:hover {
+            border-color: var(--border-strong);
+        }
+        .compat-icon-wrap {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-dim);
+            border-radius: 8px;
+            margin: 0 auto 10px;
+            color: var(--accent);
+        }
+        .compat-icon-wrap svg {
+            width: 18px;
+            height: 18px;
+        }
+        .compat-card h3 {
+            font-size: 0.87rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-bottom: 3px;
+        }
+        .compat-card p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* ========== SECURITY TABLE ========== */
+        .security-table-wrap {
+            overflow-x: auto;
+        }
+        .security-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        .security-table thead {
+            background: var(--bg-tertiary);
+        }
+        .security-table th {
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        .security-table td {
+            padding: 13px 20px;
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .security-table tr:last-child td {
+            border-bottom: none;
+        }
+        .security-table td:first-child {
+            font-weight: 600;
+            color: var(--text-heading);
+            white-space: nowrap;
+            width: 180px;
+        }
+        .security-table td:last-child {
+            color: var(--text-secondary);
+        }
+        .security-table tbody tr {
+            transition: background 0.1s;
+        }
+        .security-table tbody tr:hover {
+            background: rgba(255,255,255,0.015);
+        }
+
+        /* ========== FEATURES ========== */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px;
+            transition: border-color 0.2s;
+        }
+        .feature-card:hover {
+            border-color: var(--border-strong);
+        }
+        .feature-card h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-bottom: 6px;
+        }
+        .feature-card p {
+            font-size: 0.83rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+        }
+
+        /* ========== DEMO ========== */
+        .demo-example {
+            margin-top: 48px;
+        }
+        .demo-example-title {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 12px;
+        }
+        .demo-dual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .terminal {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+        .terminal-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid var(--border);
+        }
+        .terminal-dots {
+            display: flex;
+            gap: 6px;
+        }
+        .terminal-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .terminal-dot.r { background: #ff5f57; }
+        .terminal-dot.y { background: #febc2e; }
+        .terminal-dot.g { background: #28c840; }
+        .terminal-title {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-left: 6px;
+        }
+        .terminal-body {
+            padding: 14px 16px;
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            line-height: 1.7;
+            white-space: pre;
+            overflow-x: auto;
+            color: var(--text-secondary);
+        }
+        .terminal-body .prompt {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .terminal-body .cmd {
+            color: var(--text-primary);
+        }
+        .terminal-body .token-out {
+            color: var(--text-muted);
+        }
+        .terminal-body .success {
+            color: var(--green);
+        }
+        .terminal-body .err {
+            color: var(--red);
+        }
+        .terminal-body .dim {
+            color: var(--text-muted);
+        }
+        .audit-strip {
+            margin-top: 10px;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        .audit-strip .terminal-bar {
+            padding: 6px 14px;
+        }
+        .audit-strip .terminal-title {
+            font-size: 0.68rem;
+        }
+        .audit-strip .terminal-body {
+            padding: 10px 16px;
+            font-size: 0.72rem;
+            line-height: 1.65;
+        }
+        .chat-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 18px 16px;
+        }
+        .chat-label {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            text-align: center;
+            margin-bottom: 2px;
+        }
+        .chat-msg {
+            max-width: 88%;
+            padding: 10px 14px;
+            border-radius: 14px;
+            font-size: 0.8rem;
+            line-height: 1.55;
+        }
+        .chat-msg.outgoing {
+            align-self: flex-end;
+            background: rgba(96, 165, 250, 0.15);
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            color: var(--text-primary);
+            border-bottom-right-radius: 4px;
+        }
+        .chat-msg.incoming {
+            align-self: flex-start;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-bottom-left-radius: 4px;
+        }
+        .chat-sender {
+            font-size: 0.68rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+        .chat-sender.user { text-align: right; }
+        .chat-time {
+            font-size: 0.64rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .chat-time.right { text-align: right; }
+        .chat-token {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            word-break: break-all;
+            color: var(--text-muted);
+        }
+
+        /* ========== CTA ========== */
+        .cta-section {
+            text-align: center;
+            padding: 80px 0;
+        }
+        .cta-section h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            letter-spacing: -0.025em;
+            margin-bottom: 10px;
+        }
+        .cta-section p {
+            color: var(--text-secondary);
+            margin-bottom: 28px;
+            font-size: 1rem;
+        }
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            background: var(--accent);
+            color: #fff;
+            font-family: var(--font-body);
+            font-size: 0.88rem;
+            font-weight: 600;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.15s;
+            text-decoration: none;
+        }
+        .btn-primary:hover {
+            background: #d06e30;
+            color: #fff;
+            transform: translateY(-1px);
+        }
+        .btn-primary svg {
+            width: 16px;
+            height: 16px;
+        }
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: var(--font-body);
+            font-size: 0.88rem;
+            font-weight: 500;
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.15s;
+            text-decoration: none;
+        }
+        .btn-secondary:hover {
+            color: var(--text-primary);
+            background: rgba(255,255,255,0.03);
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            border-top: 1px solid var(--border);
+            padding: 32px 0;
+        }
+        .footer-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .footer-brand {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-heading);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .footer-brand svg {
+            width: 18px;
+            height: 18px;
+        }
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+        .footer-links a {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .footer-links a:hover {
+            color: var(--text-secondary);
+        }
+        .footer-right {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+        .footer-right a {
+            color: var(--text-muted);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 900px) {
+            .problem-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .solution-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .compat-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .demo-dual {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            html {
+                font-size: 14px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .mobile-toggle {
+                display: block;
+            }
+            .nav-links.open {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 56px;
+                left: 0;
+                right: 0;
+                background: var(--bg-secondary);
+                border-bottom: 1px solid var(--border);
+                padding: 16px 24px;
+                gap: 16px;
+            }
+            .hero {
+                padding: 110px 0 60px;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .problem-grid,
+            .solution-grid,
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .compat-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .section {
+                padding: 60px 0;
+            }
+            .install-box {
+                flex-direction: column;
+                gap: 8px;
+                width: 100%;
+                max-width: 400px;
+            }
+            .step {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+
+        /* Subtle entrance animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+    <div class="nav-inner">
+        <a href="#" class="nav-brand">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            ClawGate
+        </a>
+        <button class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <ul class="nav-links">
+            <li><a href="https://github.com/M64GitHub/clawgate/tree/master/docs">Docs</a></li>
+            <li><a href="#capabilities">Capabilities</a></li>
+            <li><a href="#quickstart">Quick Start</a></li>
+            <li><a href="#security">Security</a></li>
+            <li><a href="#features">Features</a></li>
+            <li>
+                <a href="https://github.com/M64GitHub/clawgate" class="nav-cta">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    GitHub
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Secure capability proxy for AI agents
+        </div>
+
+        <h1>Secure Files, Git &amp; Tools for AI Agents</h1>
+
+        <p class="hero-desc">
+					Give your isolated AI agent scoped, time-limited, audited access to files, git, and custom tools - without exposing your machine.<br/>
+            <strong>Assume the agent is compromised.</strong>
+        </p>
+
+        <div class="install-box">
+            <code><span class="prompt">$</span> curl -sSL https://clawgate.io/install.sh | sh</code>
+            <button class="copy-btn" onclick="copyInstall(this)">Copy</button>
+        </div>
+
+        <div class="hero-features">
+            <span class="hero-feature">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                E2E encrypted
+            </span>
+            <span class="hero-feature">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Signed tokens
+            </span>
+            <span class="hero-feature">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Revocable access
+            </span>
+            <span class="hero-feature">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Full audit log
+            </span>
+        </div>
+
+        <div class="hero-badges">
+            <a href="https://github.com/M64GitHub/clawgate/releases"><img src="https://img.shields.io/github/v/release/M64GitHub/clawgate?include_prereleases&style=flat-square&color=e07a3a" alt="Release"></a>
+            <a href="https://github.com/M64GitHub/clawgate/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-MIT-e07a3a?style=flat-square" alt="License"></a>
+        </div>
+    </div>
+</section>
+
+<!-- WHY CLAWGATE -->
+<section class="section" id="problem">
+    <div class="container">
+        <div class="section-header fade-in">
+            <span class="section-label">Why ClawGate</span>
+            <h2 class="section-title">Your Agent Needs Access to Your Machine</h2>
+            <p class="section-subtitle">You're running AI on an isolated machine. Smart. But now it needs your files, your repos, your tools...</p>
+        </div>
+
+        <div class="problem-grid fade-in">
+            <div class="problem-card">
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                    NFS / SMB Mount
+                </h3>
+                <p>Full filesystem access. Agent gets pwned &rarr; you get pwned.</p>
+            </div>
+            <div class="problem-card">
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                    SSH + rsync
+                </h3>
+                <p>Credentials stored on agent machine. Same problem.</p>
+            </div>
+            <div class="problem-card">
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                    Manual Copy
+                </h3>
+                <p>Tedious. Breaks flow. Doesn't scale.</p>
+            </div>
+            <div class="problem-card">
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                    Cloud Sync
+                </h3>
+                <p>Your code on someone else's servers.</p>
+            </div>
+        </div>
+
+        <div class="problem-bottom fade-in">
+            <strong>None of these assume the agent might be compromised.</strong> But it might be - prompt injection is real.
+        </div>
+    </div>
+</section>
+
+<!-- CAPABILITIES -->
+<section class="section" id="capabilities">
+    <div class="container">
+        <div class="section-header fade-in">
+            <span class="section-label">Capabilities</span>
+            <h2 class="section-title">Capability-Based Access</h2>
+            <p class="section-subtitle">Grant specific paths, specific tools, specific operations, for specific time. Nothing more.</p>
+        </div>
+
+        <div class="solution-grid fade-in">
+            <div class="solution-card">
+                <div class="solution-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <h3>Zero Trust</h3>
+                <p>Assumes the agent machine is compromised. Because it might be.</p>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                </div>
+                <h3>Least Privilege</h3>
+                <p>Grant <code style="font-family:var(--font-mono);font-size:0.78rem;background:var(--bg-code);padding:1px 5px;border-radius:3px">~/projects/app/**</code> not "everything".</p>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <h3>Time-Bounded</h3>
+                <p>Tokens expire. 1 hour, 24 hours, 7 days - you choose.</p>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                </div>
+                <h3>Revocable</h3>
+                <p>Revoke tokens instantly. Dead credential, even if the agent still holds it.</p>
+            </div>
+            <div class="solution-card">
+                <div class="solution-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
+                <h3>Full Audit</h3>
+                <p>Every operation logged with path, tool, timestamp, and result.</p>
+            </div>
+        </div>
+
+        <div class="architecture-wrap fade-in">
+            <img src="architecture.svg" alt="ClawGate Architecture Diagram">
+        </div>
+    </div>
+</section>
+
+<!-- QUICKSTART -->
+<section class="section" id="quickstart">
+    <div class="container">
+        <div class="section-header fade-in">
+            <span class="section-label">Getting Started</span>
+            <h2 class="section-title">Up and Running in 60 Seconds</h2>
+        </div>
+
+        <div class="steps fade-in">
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <h3>Generate Keys &amp; Grant Access</h3>
+                    <p class="step-desc">On your primary machine (laptop / workstation)</p>
+							<div class="code-block"><code><span class="cmd">clawgate keygen</span><br/>
+								<span class="cmd">clawgate grant --read "~/projects/**" --ttl 24h > token.txt</span><br/>
+								<span class="comment"># Or with git access:</span><br/>
+								<span class="cmd">clawgate grant --git "~/projects/**" --ttl 24h > token.txt</span><br/>
+								<span class="comment"># Or grant a registered tool:</span><br/>
+<span class="cmd">clawgate grant --tool web-fetch --ttl 4h > token.txt</span></code></div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <h3>Copy to Agent Machine</h3>
+                    <p class="step-desc">Send the token and your public key to the isolated machine</p>
+                    <div class="code-block"><code><span class="cmd">scp ~/.clawgate/keys/public.key token.txt agent-machine:</span></code></div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <h3>Start Agent</h3>
+                    <p class="step-desc">On the isolated machine (Mac Mini, VPS, container)</p>
+							<div class="code-block"><code><span class="cmd">mkdir -p ~/.clawgate/keys</span><br/>
+								<span class="cmd">mv public.key ~/.clawgate/keys/</span><br/>
+								<span class="cmd">clawgate token add "$(cat token.txt)"</span><br/>
+								<span class="cmd">clawgate --mode agent</span></code></div><br/>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                    <h3>Connect</h3>
+                    <p class="step-desc">Back on your primary machine</p>
+                    <div class="code-block"><code><span class="cmd">clawgate --mode resource --connect &lt;agent-ip&gt;:53280</span></code></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="step-note fade-in">
+            <strong>Steps 1-3 are one-time setup.</strong> After that, just create new tokens anytime. Tokens hot-reload - no restart needed.
+        </div>
+    </div>
+</section>
+
+<!-- COMPATIBILITY -->
+<section class="section" id="compatibility">
+    <div class="container">
+        <div class="section-header fade-in">
+            <span class="section-label">Agent Integration</span>
+            <h2 class="section-title">Works With Any Agent</h2>
+            <p class="section-subtitle">Skill files for CLI-based agents. MCP server for tool-based agents.</p>
+        </div>
+
+        <div class="compat-grid fade-in">
+            <div class="compat-card">
+                <div class="compat-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+                <h3>OpenClaw</h3>
+                <p>Skill file (CLI)</p>
+            </div>
+            <div class="compat-card">
+                <div class="compat-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+                <h3>Claude Code</h3>
+                <p>Skill file + MCP</p>
+            </div>
+            <div class="compat-card">
+                <div class="compat-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+                <h3>Cursor</h3>
+                <p>MCP server</p>
+            </div>
+            <div class="compat-card">
+                <div class="compat-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+                <h3>OpenCode</h3>
+                <p>Skill file + MCP</p>
+            </div>
+            <div class="compat-card">
+                <div class="compat-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+                <h3>Codex</h3>
+                <p>Skill file + MCP</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECURITY -->
+<section class="section" id="security">
+    <div class="container">
+        <div class="section-header fade-in">
+            <span class="section-label">Defense in Depth</span>
+            <h2 class="section-title">Security Model</h2>
+            <p class="section-subtitle">14 layers of protection. Assume breach at every layer.</p>
+        </div>
+
+        <div class="security-table-wrap fade-in">
+            <table class="security-table">
+                <thead>
+                    <tr><th>Layer</th><th>Protection</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Transport</td><td>X25519 + XChaCha20-Poly1305 end-to-end encryption</td></tr>
+                    <tr><td>Forward Secrecy</td><td>Fresh ephemeral keys per session</td></tr>
+                    <tr><td>Authentication</td><td>Ed25519 signed JWT capability tokens</td></tr>
+                    <tr><td>Authorization</td><td>Per-request path and tool scope validation</td></tr>
+                    <tr><td>Revocation</td><td>Resource-side revocation list, checked every request</td></tr>
+                    <tr><td>Path Safety</td><td>Canonicalization, symlink rejection, traversal protection</td></tr>
+                    <tr><td>Forbidden Paths</td><td>~/.ssh, ~/.aws, ~/.gnupg - hardcoded, ungrantable</td></tr>
+                    <tr><td>Git Allowlists</td><td>Three-tier command allowlists, blocked flags (-c, --exec)</td></tr>
+                    <tr><td>Argument Validation</td><td>Per-tool allowlist/denylist for command flags</td></tr>
+                    <tr><td>No Shell Execution</td><td>Tools run via direct argv, no shell interpolation</td></tr>
+                    <tr><td>Output Limits</td><td>Per-tool configurable output truncation</td></tr>
+                    <tr><td>Symlink Rejection</td><td>All symlinks unconditionally rejected</td></tr>
+                    <tr><td>Time Limits</td><td>Tokens expire, limiting blast radius</td></tr>
+                    <tr><td>Audit Trail</td><td>Every operation logged locally with cryptographic proof</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+    <div class="container">
+        <div class="section-header fade-in">
+            <span class="section-label">Features</span>
+            <h2 class="section-title">What You Get</h2>
+        </div>
+
+        <div class="features-grid fade-in">
+            <div class="feature-card">
+                <h3>Custom Tool Proxy</h3>
+                <p>Register any CLI tool on your machine. The agent invokes it remotely through ClawGate's secure pipeline with argument validation.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Git Operations</h3>
+                <p>Three permission tiers: read-only, write, full. Command allowlists block dangerous flags.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Token Revocation</h3>
+                <p>Revoke tokens before they expire. Resource-side enforcement - the agent doesn't need to be contacted.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Skill Generation</h3>
+                <p>Auto-generates agent-readable skill files from the tool registry. AI agents discover tools automatically.</p>
+            </div>
+            <div class="feature-card">
+                <h3>E2E Encryption</h3>
+                <p>X25519 key exchange + XChaCha20-Poly1305. Forward secrecy per session.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Hot Token Reload</h3>
+                <p>Add tokens while running. No restarts. No reconnects.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Persistent Audit Trail</h3>
+                <p>Every operation logged to <code style="font-family:var(--font-mono);font-size:0.78rem;background:var(--bg-code);padding:1px 5px;border-radius:3px">~/.clawgate/logs/audit.log</code> with full detail.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Pure Zig, Zero Deps</h3>
+                <p>Single binary. No runtime. No supply chain risk. Minimal latency.</p>
+            </div>
+            <div class="feature-card">
+                <h3>MCP + Skill Files</h3>
+                <p>Native MCP server for tool-based agents. Drop-in skill files for CLI agents like OpenClaw.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DEMO -->
+<section class="section" id="demo">
+    <div class="container">
+        <div class="section-header fade-in">
+            <span class="section-label">See It in Action</span>
+            <h2 class="section-title">Real Usage</h2>
+            <p class="section-subtitle">Two Telegram conversations with OpenClaw, followed by example CLI operations the agent calls under the hood for illustration.</p>
+        </div>
+
+        <!-- Example: Document Analysis (Telegram) -->
+        <div class="demo-example fade-in">
+            <div class="demo-example-title">Document Analysis via Telegram</div>
+            <div class="demo-dual">
+                <div class="chat-wrap">
+                    <div class="chat-label">Telegram</div>
+                    <div class="chat-sender user">You</div>
+                    <div class="chat-msg outgoing">
+                        Hey Echo128! Here a new token:<br>
+                        <span class="chat-token">eyJhbGciOiJFZDI1NTE5IiwidHlwIjoiSldUIn0.eyJpc3MiOiJjbGF3Z2F0ZSIsInN1YiI6ImFnZW50LTEiLCJleHAiOj...</span><br><br>
+                        Can you check the doc: /home/m64/Documents/test.md<br>
+                        How big is it, what is it about?
+                    </div>
+                    <div class="chat-time right">22:18</div>
+                    <div class="chat-sender">Echo128</div>
+                    <div class="chat-msg incoming">
+                        Added the token!<br><br>
+                        <strong>File info:</strong><br>
+                        &bull; Size: 6,932 bytes (~7KB)<br>
+                        &bull; Modified: 2025-12-28<br><br>
+                        <strong>What it's about:</strong><br>
+                        A blog post about running <strong>OpenAI Whisper on AMD Radeon 890M</strong> with ROCm! You built a local speech-to-text replacement for Wispr Flow in ~500 lines of Python.<br><br>
+                        <strong>Highlights:</strong><br>
+                        &bull; FastAPI + PyTorch + Whisper<br>
+                        &bull; ROCm finally supports Strix Point (gfx1150)<br>
+                        &bull; Faster than real-time transcription on integrated GPU<br><br>
+                        Great writeup!
+                    </div>
+                    <div class="chat-time">22:18</div>
+                </div>
+                <div class="terminal">
+                    <div class="terminal-bar">
+                        <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                        <span class="terminal-title">Primary Machine - Resource Daemon</span>
+                    </div>
+                    <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">clawgate --mode resource --connect 192.168.178.39:53280</span>
+<span class="dim">info:</span> Loading public key from /home/m64/.clawgate/keys/public.key
+<span class="dim">info:</span> Resource daemon starting, will connect to 192.168.178.39:53280
+<span class="dim">info:</span> Connecting to agent at 192.168.178.39:53280
+<span class="success">info:</span> <span class="success">Connected, performing handshake</span>
+
+<span class="prompt">$</span> <span class="cmd">clawgate grant --read "/home/m64/Documents/**" --ttl 24h</span>
+<span class="token-out">eyJhbGciOiJFZDI1NTE5IiwidHlwIjoiSldUIn0.eyJpc3MiOi...</span></div>
+                </div>
+            </div>
+            <div class="audit-strip">
+                <div class="terminal-bar">
+                    <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                    <span class="terminal-title">Audit Log (primary machine)</span>
+                </div>
+                <div class="terminal-body"><span class="success">2026-02-03T22:23:26Z</span> AUDIT req=<span class="dim">req_5af1a0828aab67a4</span> op=stat
+  path=/home/m64/Documents/test.md <span class="success">success=true</span>
+<span class="success">2026-02-03T22:23:26Z</span> AUDIT req=<span class="dim">req_784b20f49b318ec7</span> op=read
+  path=/home/m64/Documents/test.md <span class="success">success=true</span></div>
+            </div>
+        </div>
+
+        <!-- Example: Project Exploration (Telegram) -->
+        <div class="demo-example fade-in">
+            <div class="demo-example-title">Project Exploration via Telegram</div>
+            <div class="demo-dual">
+                <div class="chat-wrap">
+                    <div class="chat-label">Telegram</div>
+                    <div class="chat-sender user">You</div>
+                    <div class="chat-msg outgoing">
+                        Hey Echo! Can you read my /home/m64/space/ai/clawgate please! Whats in there?<br>
+                        Show me the first 5 lines of the LICENSE file?
+                    </div>
+                    <div class="chat-time right">02:20</div>
+                    <div class="chat-sender">Echo128</div>
+                    <div class="chat-msg incoming">
+                        Here's your ClawGate project!<br><br>
+                        <code style="font-size:0.72rem;white-space:pre;line-height:1.6;display:block">/home/m64/space/ai/clawgate/
+&#9500;&#9472;&#9472; src/           # Source code
+&#9500;&#9472;&#9472; docs/          # Documentation
+&#9500;&#9472;&#9472; skills/        # OpenClaw skill files
+&#9500;&#9472;&#9472; testing/       # Test suite
+&#9500;&#9472;&#9472; scripts/       # Build/install scripts
+&#9500;&#9472;&#9472; dist/          # Distribution builds
+&#9500;&#9472;&#9472; build.zig      # Zig build config
+&#9500;&#9472;&#9472; README.md
+&#9500;&#9472;&#9472; LICENSE
+&#9500;&#9472;&#9472; SECURITY.md
+&#9492;&#9472;&#9472; CONTRIBUTING.md</code><br>
+                        <strong>LICENSE (first 5 lines):</strong><br>
+                        <code style="font-size:0.72rem;white-space:pre;line-height:1.6;display:block">MIT License
+
+Copyright (c) 2026 M64
+
+Permission is hereby granted, free of charge, to any
+person obtaining a copy ...</code><br>
+                        Want me to dive into any specific file?
+                    </div>
+                    <div class="chat-time">02:20</div>
+                </div>
+                <div class="terminal">
+                    <div class="terminal-bar">
+                        <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                        <span class="terminal-title">Primary Machine - Resource Daemon</span>
+                    </div>
+                    <div class="terminal-body"><span class="success">info:</span> AUDIT: req=<span class="dim">req_d1f0500595c807e7</span> op=list
+  path=/home/m64/space/ai/clawgate <span class="success">success=true</span>
+<span class="success">info:</span> AUDIT: req=<span class="dim">req_31ecdcfb57e62efb</span> op=read
+  path=/home/m64/space/ai/clawgate/LICENSE <span class="success">success=true</span></div>
+                </div>
+            </div>
+            <div class="audit-strip">
+                <div class="terminal-bar">
+                    <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                    <span class="terminal-title">Audit Log (primary machine)</span>
+                </div>
+                <div class="terminal-body"><span class="success">2026-02-08T02:36:28Z</span> AUDIT req=<span class="dim">req_d1f0500595c807e7</span> op=list
+  path=/home/m64/space/ai/clawgate <span class="success">success=true</span>
+<span class="success">2026-02-08T02:36:28Z</span> AUDIT req=<span class="dim">req_31ecdcfb57e62efb</span> op=read
+  path=/home/m64/space/ai/clawgate/LICENSE <span class="success">success=true</span></div>
+            </div>
+        </div>
+
+        <!-- Example 1: File Access -->
+        <div class="demo-example fade-in">
+            <div class="demo-example-title">File Access</div>
+            <div class="demo-dual">
+                <div class="terminal">
+                    <div class="terminal-bar">
+                        <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                        <span class="terminal-title">Primary Machine</span>
+                    </div>
+                    <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">clawgate grant --read ~/projects/webapp/** --ttl 24h</span>
+<span class="token-out">eyJhbGciOiJFZDI1NTE5IiwidHlwIjoiSldUIn0.eyJpc3MiOi...</span></div>
+                </div>
+                <div class="terminal">
+                    <div class="terminal-bar">
+                        <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                        <span class="terminal-title">Agent Machine</span>
+                    </div>
+                    <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">clawgate cat ~/projects/webapp/src/main.zig</span>
+<span class="dim">const</span> std = @import("std");
+<span class="dim">const</span> server = @import("server.zig");
+
+<span class="dim">pub fn</span> main() !<span class="dim">void</span> {
+    <span class="dim">var</span> gpa: std.heap.GeneralPurposeAllocator(.{}) = .init;
+    ...</div>
+                </div>
+            </div>
+            <div class="audit-strip">
+                <div class="terminal-bar">
+                    <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                    <span class="terminal-title">Audit Log (primary machine)</span>
+                </div>
+                <div class="terminal-body"><span class="success">2026-02-08T14:32:18Z</span> AUDIT req=<span class="dim">req_a7c3f2e1</span> op=read
+  path=/home/mario/projects/webapp/src/main.zig <span class="success">success=true</span></div>
+            </div>
+        </div>
+
+        <!-- Example 2: Git Operations -->
+        <div class="demo-example fade-in">
+            <div class="demo-example-title">Git Operations</div>
+            <div class="demo-dual">
+                <div class="terminal">
+                    <div class="terminal-bar">
+                        <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                        <span class="terminal-title">Primary Machine</span>
+                    </div>
+                    <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">clawgate grant --git ~/projects/webapp/** --ttl 24h</span>
+<span class="token-out">eyJhbGciOiJFZDI1NTE5IiwidHlwIjoiSldUIn0.eyJpc3MiOi...</span></div>
+                </div>
+                <div class="terminal">
+                    <div class="terminal-bar">
+                        <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                        <span class="terminal-title">Agent Machine</span>
+                    </div>
+                    <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">clawgate git ~/projects/webapp log --oneline -5</span>
+<span class="dim">a8e3ba1</span> Merge pull request #3 from v0.3.0/custom-tools
+<span class="dim">4b0698d</span> v0.3.0 - custom tools
+<span class="dim">c92a1f8</span> Add argument validation for tool proxy
+<span class="dim">7d3e5b2</span> Implement tool registry with JSON persistence
+<span class="dim">1a4f9c0</span> Initial commit</div>
+                </div>
+            </div>
+            <div class="audit-strip">
+                <div class="terminal-bar">
+                    <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                    <span class="terminal-title">Audit Log (primary machine)</span>
+                </div>
+                <div class="terminal-body"><span class="success">2026-02-08T14:33:05Z</span> AUDIT req=<span class="dim">req_e851c200</span> op=git
+  path=/home/mario/projects/webapp <span class="success">success=true</span></div>
+            </div>
+        </div>
+
+        <!-- Example 3: Custom Tool -->
+        <div class="demo-example fade-in">
+            <div class="demo-example-title">Custom Tools</div>
+            <div class="demo-dual">
+                <div class="terminal">
+                    <div class="terminal-bar">
+                        <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                        <span class="terminal-title">Primary Machine</span>
+                    </div>
+                    <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">clawgate tool register calc \</span>
+<span class="cmd">    --command "bc -l" --allow-args "-q" \</span>
+<span class="cmd">    --description "Calculator"</span>
+Tool registered
+
+<span class="prompt">$</span> <span class="cmd">clawgate grant --tool calc --ttl 4h</span>
+<span class="token-out">eyJhbGciOiJFZDI1NTE5IiwidHlwIjoiSldUIn0.eyJpc3MiOi...</span></div>
+                </div>
+                <div class="terminal">
+                    <div class="terminal-bar">
+                        <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                        <span class="terminal-title">Agent Machine</span>
+                    </div>
+                    <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">echo "scale=2; 22/7" | clawgate tool calc</span>
+3.14</div>
+                </div>
+            </div>
+            <div class="audit-strip">
+                <div class="terminal-bar">
+                    <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                    <span class="terminal-title">Audit Log (primary machine)</span>
+                </div>
+                <div class="terminal-body"><span class="success">2026-02-08T14:35:12Z</span> AUDIT req=<span class="dim">req_9d47c18f</span> op=tool
+  path=calc <span class="success">success=true</span></div>
+            </div>
+        </div>
+
+        <!-- Token Handoff + Security Denials -->
+        <div class="demo-example fade-in">
+            <div class="demo-example-title">Token Handoff + Security</div>
+            <div class="demo-dual">
+                <div class="chat-wrap">
+                    <div class="chat-label">Telegram</div>
+                    <div class="chat-sender user">You</div>
+                    <div class="chat-msg outgoing">
+                        <div class="chat-token">eyJhbGciOiJFZDI1NTE5IiwidHlwIjoiSldUIn0.eyJpc3MiOiJjbGF3Z2F0ZSIsInN1YiI6ImFnZW50LTEiLCJleHAiOj...</div>
+                    </div>
+                    <div class="chat-time right">14:31</div>
+                    <div class="chat-sender">Agent</div>
+                    <div class="chat-msg incoming">
+                        Token added: <strong>cg_9ae7ce62</strong>. I now have read access to <code style="font-size:0.72rem">~/projects/webapp/**</code>. Expires in 24h.
+                    </div>
+                    <div class="chat-time">14:31</div>
+                </div>
+                <div class="terminal">
+                    <div class="terminal-bar">
+                        <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                        <span class="terminal-title">Agent Machine</span>
+                    </div>
+                    <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">clawgate cat ~/.ssh/id_rsa</span>
+<span class="err">Error: ACCESS_DENIED: Forbidden path</span>
+
+<span class="prompt">$</span> <span class="cmd">clawgate git ~/projects/webapp push origin main</span>
+<span class="err">Error: SCOPE_VIOLATION: Insufficient git permissions</span></div>
+                </div>
+            </div>
+            <div class="audit-strip">
+                <div class="terminal-bar">
+                    <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                    <span class="terminal-title">Audit Log (primary machine)</span>
+                </div>
+                <div class="terminal-body"><span class="err">2026-02-08T14:36:00Z</span> AUDIT req=<span class="dim">req_552621fd</span> op=read
+  path=/home/mario/.ssh/id_rsa <span class="err">success=false error=ACCESS_DENIED</span>
+<span class="err">2026-02-08T14:36:05Z</span> AUDIT req=<span class="dim">req_79565e1c</span> op=git
+  path=/home/mario/projects/webapp <span class="err">success=false error=SCOPE_VIOLATION</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+    <div class="container fade-in">
+        <h2>Ready to Secure Your AI Agent?</h2>
+        <p>Stop exposing your machine. Start using capability-based access.</p>
+        <div class="cta-buttons">
+            <a href="https://github.com/M64GitHub/clawgate" class="btn-primary">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                View on GitHub
+            </a>
+            <a href="#quickstart" class="btn-secondary">Quick Start &rarr;</a>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-inner">
+            <div class="footer-left">
+                <span class="footer-brand">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    ClawGate
+                </span>
+                <ul class="footer-links">
+                    <li><a href="https://github.com/M64GitHub/clawgate">GitHub</a></li>
+                    <li><a href="https://github.com/M64GitHub/clawgate/tree/master/docs">Docs</a></li>
+                    <li><a href="https://github.com/M64GitHub/clawgate/blob/main/LICENSE">MIT License</a></li>
+                </ul>
+            </div>
+            <div class="footer-right">
+                &copy; 2026 <a href="https://m64github.github.io/">M64</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    function copyInstall(btn) {
+        navigator.clipboard.writeText('curl -sSL https://clawgate.io/install.sh | sh');
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+            btn.textContent = 'Copy';
+            btn.classList.remove('copied');
+        }, 2000);
+    }
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    // Fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
