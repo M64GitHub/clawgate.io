@@ -643,37 +643,155 @@
         }
 
         /* ========== DEMO ========== */
-        .demo-image {
-            margin-top: 8px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            background: var(--bg-code);
+        .demo-example {
+            margin-top: 48px;
         }
-        .demo-image img {
-            width: 100%;
-            display: block;
-        }
-        .demo-caption {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            text-align: center;
-            margin-top: 10px;
-        }
-        .demo-group {
-            margin-top: 40px;
-        }
-        .demo-group-title {
-            font-size: 0.92rem;
+        .demo-example-title {
+            font-size: 0.88rem;
             font-weight: 600;
-            color: var(--text-heading);
-            margin-bottom: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 12px;
         }
         .demo-dual {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
-            margin-top: 8px;
+        }
+        .terminal {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+        .terminal-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid var(--border);
+        }
+        .terminal-dots {
+            display: flex;
+            gap: 6px;
+        }
+        .terminal-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .terminal-dot.r { background: #ff5f57; }
+        .terminal-dot.y { background: #febc2e; }
+        .terminal-dot.g { background: #28c840; }
+        .terminal-title {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-left: 6px;
+        }
+        .terminal-body {
+            padding: 14px 16px;
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            line-height: 1.7;
+            white-space: pre;
+            overflow-x: auto;
+            color: var(--text-secondary);
+        }
+        .terminal-body .prompt {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .terminal-body .cmd {
+            color: var(--text-primary);
+        }
+        .terminal-body .token-out {
+            color: var(--text-muted);
+        }
+        .terminal-body .success {
+            color: var(--green);
+        }
+        .terminal-body .err {
+            color: var(--red);
+        }
+        .terminal-body .dim {
+            color: var(--text-muted);
+        }
+        .audit-strip {
+            margin-top: 10px;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        .audit-strip .terminal-bar {
+            padding: 6px 14px;
+        }
+        .audit-strip .terminal-title {
+            font-size: 0.68rem;
+        }
+        .audit-strip .terminal-body {
+            padding: 10px 16px;
+            font-size: 0.72rem;
+            line-height: 1.65;
+        }
+        .chat-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 18px 16px;
+        }
+        .chat-label {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            text-align: center;
+            margin-bottom: 2px;
+        }
+        .chat-msg {
+            max-width: 88%;
+            padding: 10px 14px;
+            border-radius: 14px;
+            font-size: 0.8rem;
+            line-height: 1.55;
+        }
+        .chat-msg.outgoing {
+            align-self: flex-end;
+            background: rgba(96, 165, 250, 0.15);
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            color: var(--text-primary);
+            border-bottom-right-radius: 4px;
+        }
+        .chat-msg.incoming {
+            align-self: flex-start;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-bottom-left-radius: 4px;
+        }
+        .chat-sender {
+            font-size: 0.68rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+        .chat-sender.user { text-align: right; }
+        .chat-time {
+            font-size: 0.64rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .chat-time.right { text-align: right; }
+        .chat-token {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            word-break: break-all;
+            color: var(--text-muted);
         }
 
         /* ========== CTA ========== */
@@ -1239,29 +1357,272 @@
         <div class="section-header fade-in">
             <span class="section-label">See It in Action</span>
             <h2 class="section-title">Real Usage</h2>
-            <p class="section-subtitle">AI agent accesses files and tools remotely. Every operation logged.</p>
+            <p class="section-subtitle">Two real Telegram conversations with an AI agent, followed by the CLI operations the agent calls under the hood &mdash; every operation audited.</p>
         </div>
 
-        <div class="demo-group fade-in">
+        <!-- Example: Document Analysis (Telegram) -->
+        <div class="demo-example fade-in">
+            <div class="demo-example-title">Document Analysis via Telegram</div>
             <div class="demo-dual">
-                <div class="demo-image">
-                    <img src="demo-interaction.png" alt="ClawGate agent interaction">
+                <div class="chat-wrap">
+                    <div class="chat-label">Telegram</div>
+                    <div class="chat-sender user">You</div>
+                    <div class="chat-msg outgoing">
+                        Hey Echo128! Here a new token:<br>
+                        <span class="chat-token">eyJhbGciOiJFZDI1NTE5IiwidHlwIjoiSldUIn0.eyJpc3MiOiJjbGF3Z2F0ZSIsInN1YiI6ImFnZW50LTEiLCJleHAiOj...</span><br><br>
+                        Can you check the doc: /home/m64/Documents/test.md<br>
+                        How big is it, what is it about?
+                    </div>
+                    <div class="chat-time right">22:18</div>
+                    <div class="chat-sender">Echo128</div>
+                    <div class="chat-msg incoming">
+                        Added the token!<br><br>
+                        <strong>File info:</strong><br>
+                        &bull; Size: 6,932 bytes (~7KB)<br>
+                        &bull; Modified: 2025-12-28<br><br>
+                        <strong>What it's about:</strong><br>
+                        A blog post about running <strong>OpenAI Whisper on AMD Radeon 890M</strong> with ROCm! You built a local speech-to-text replacement for Wispr Flow in ~500 lines of Python.<br><br>
+                        <strong>Highlights:</strong><br>
+                        &bull; FastAPI + PyTorch + Whisper<br>
+                        &bull; ROCm finally supports Strix Point (gfx1150)<br>
+                        &bull; Faster than real-time transcription on integrated GPU<br><br>
+                        Great writeup!
+                    </div>
+                    <div class="chat-time">22:18</div>
                 </div>
-                <div class="demo-image">
-                    <img src="demo-interaction2.png" alt="ClawGate agent interaction">
+                <div class="terminal">
+                    <div class="terminal-bar">
+                        <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                        <span class="terminal-title">Primary Machine &mdash; Resource Daemon</span>
+                    </div>
+                    <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">clawgate --mode resource --connect 192.168.178.39:4223</span>
+<span class="dim">info:</span> Loading public key from /home/m64/.clawgate/keys/public.key
+<span class="dim">info:</span> Resource daemon starting, will connect to 192.168.178.39:4223
+<span class="dim">info:</span> Connecting to agent at 192.168.178.39:4223
+<span class="success">info:</span> <span class="success">Connected, performing handshake</span>
+
+<span class="prompt">$</span> <span class="cmd">clawgate grant --read "/home/m64/Documents/**" --ttl 24h</span>
+<span class="token-out">eyJhbGciOiJFZDI1NTE5IiwidHlwIjoiSldUIn0.eyJpc3MiOi...</span></div>
                 </div>
+            </div>
+            <div class="audit-strip">
+                <div class="terminal-bar">
+                    <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                    <span class="terminal-title">Audit Log (primary machine)</span>
+                </div>
+                <div class="terminal-body"><span class="success">2026-02-03T22:23:26Z</span> AUDIT req=<span class="dim">req_5af1a0828aab67a4</span> op=stat
+  path=/home/m64/Documents/test.md <span class="success">success=true</span>
+<span class="success">2026-02-03T22:23:26Z</span> AUDIT req=<span class="dim">req_784b20f49b318ec7</span> op=read
+  path=/home/m64/Documents/test.md <span class="success">success=true</span></div>
             </div>
         </div>
 
-        <div class="demo-group fade-in">
-            <div class="demo-group-title">Even easier - send a token via Telegram</div>
+        <!-- Example: Project Exploration (Telegram) -->
+        <div class="demo-example fade-in">
+            <div class="demo-example-title">Project Exploration via Telegram</div>
             <div class="demo-dual">
-                <div class="demo-image">
-                    <img src="example2.png" alt="Sending token via Telegram">
+                <div class="chat-wrap">
+                    <div class="chat-label">Telegram</div>
+                    <div class="chat-sender user">You</div>
+                    <div class="chat-msg outgoing">
+                        Hey Echo! Can you read my /home/m64/space/ai/clawgate please! Whats in there?<br>
+                        Show me the first 5 lines of the LICENSE file?
+                    </div>
+                    <div class="chat-time right">02:20</div>
+                    <div class="chat-sender">Echo128</div>
+                    <div class="chat-msg incoming">
+                        Here's your ClawGate project!<br><br>
+                        <code style="font-size:0.72rem;white-space:pre;line-height:1.6;display:block">/home/m64/space/ai/clawgate/
+&#9500;&#9472;&#9472; src/           # Source code
+&#9500;&#9472;&#9472; docs/          # Documentation
+&#9500;&#9472;&#9472; skills/        # OpenClaw skill files
+&#9500;&#9472;&#9472; testing/       # Test suite
+&#9500;&#9472;&#9472; scripts/       # Build/install scripts
+&#9500;&#9472;&#9472; dist/          # Distribution builds
+&#9500;&#9472;&#9472; build.zig      # Zig build config
+&#9500;&#9472;&#9472; README.md
+&#9500;&#9472;&#9472; LICENSE
+&#9500;&#9472;&#9472; SECURITY.md
+&#9492;&#9472;&#9472; CONTRIBUTING.md</code><br>
+                        <strong>LICENSE (first 5 lines):</strong><br>
+                        <code style="font-size:0.72rem;white-space:pre;line-height:1.6;display:block">MIT License
+
+Copyright (c) 2026 M64
+
+Permission is hereby granted, free of charge, to any
+person obtaining a copy ...</code><br>
+                        Want me to dive into any specific file?
+                    </div>
+                    <div class="chat-time">02:20</div>
                 </div>
-                <div class="demo-image">
-                    <img src="example2-shell.png" alt="Agent applying the token">
+                <div class="terminal">
+                    <div class="terminal-bar">
+                        <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                        <span class="terminal-title">Primary Machine &mdash; Resource Daemon</span>
+                    </div>
+                    <div class="terminal-body"><span class="success">info:</span> AUDIT: req=<span class="dim">req_d1f0500595c807e7</span> op=list
+  path=/home/m64/space/ai/clawgate <span class="success">success=true</span>
+<span class="success">info:</span> AUDIT: req=<span class="dim">req_31ecdcfb57e62efb</span> op=read
+  path=/home/m64/space/ai/clawgate/LICENSE <span class="success">success=true</span></div>
                 </div>
+            </div>
+            <div class="audit-strip">
+                <div class="terminal-bar">
+                    <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                    <span class="terminal-title">Audit Log (primary machine)</span>
+                </div>
+                <div class="terminal-body"><span class="success">2026-02-08T02:36:28Z</span> AUDIT req=<span class="dim">req_d1f0500595c807e7</span> op=list
+  path=/home/m64/space/ai/clawgate <span class="success">success=true</span>
+<span class="success">2026-02-08T02:36:28Z</span> AUDIT req=<span class="dim">req_31ecdcfb57e62efb</span> op=read
+  path=/home/m64/space/ai/clawgate/LICENSE <span class="success">success=true</span></div>
+            </div>
+        </div>
+
+        <!-- Example 1: File Access -->
+        <div class="demo-example fade-in">
+            <div class="demo-example-title">File Access</div>
+            <div class="demo-dual">
+                <div class="terminal">
+                    <div class="terminal-bar">
+                        <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                        <span class="terminal-title">Primary Machine</span>
+                    </div>
+                    <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">clawgate grant --read ~/projects/webapp/** --ttl 24h</span>
+<span class="token-out">eyJhbGciOiJFZDI1NTE5IiwidHlwIjoiSldUIn0.eyJpc3MiOi...</span></div>
+                </div>
+                <div class="terminal">
+                    <div class="terminal-bar">
+                        <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                        <span class="terminal-title">Agent Machine</span>
+                    </div>
+                    <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">clawgate cat ~/projects/webapp/src/main.zig</span>
+<span class="dim">const</span> std = @import("std");
+<span class="dim">const</span> server = @import("server.zig");
+
+<span class="dim">pub fn</span> main() !<span class="dim">void</span> {
+    <span class="dim">var</span> gpa: std.heap.GeneralPurposeAllocator(.{}) = .init;
+    ...</div>
+                </div>
+            </div>
+            <div class="audit-strip">
+                <div class="terminal-bar">
+                    <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                    <span class="terminal-title">Audit Log (primary machine)</span>
+                </div>
+                <div class="terminal-body"><span class="success">2026-02-08T14:32:18Z</span> AUDIT req=<span class="dim">req_a7c3f2e1</span> op=read
+  path=/home/mario/projects/webapp/src/main.zig <span class="success">success=true</span></div>
+            </div>
+        </div>
+
+        <!-- Example 2: Git Operations -->
+        <div class="demo-example fade-in">
+            <div class="demo-example-title">Git Operations</div>
+            <div class="demo-dual">
+                <div class="terminal">
+                    <div class="terminal-bar">
+                        <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                        <span class="terminal-title">Primary Machine</span>
+                    </div>
+                    <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">clawgate grant --git ~/projects/webapp/** --ttl 24h</span>
+<span class="token-out">eyJhbGciOiJFZDI1NTE5IiwidHlwIjoiSldUIn0.eyJpc3MiOi...</span></div>
+                </div>
+                <div class="terminal">
+                    <div class="terminal-bar">
+                        <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                        <span class="terminal-title">Agent Machine</span>
+                    </div>
+                    <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">clawgate git ~/projects/webapp log --oneline -5</span>
+<span class="dim">a8e3ba1</span> Merge pull request #3 from v0.3.0/custom-tools
+<span class="dim">4b0698d</span> v0.3.0 - custom tools
+<span class="dim">c92a1f8</span> Add argument validation for tool proxy
+<span class="dim">7d3e5b2</span> Implement tool registry with JSON persistence
+<span class="dim">1a4f9c0</span> Initial commit</div>
+                </div>
+            </div>
+            <div class="audit-strip">
+                <div class="terminal-bar">
+                    <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                    <span class="terminal-title">Audit Log (primary machine)</span>
+                </div>
+                <div class="terminal-body"><span class="success">2026-02-08T14:33:05Z</span> AUDIT req=<span class="dim">req_e851c200</span> op=git
+  path=/home/mario/projects/webapp <span class="success">success=true</span></div>
+            </div>
+        </div>
+
+        <!-- Example 3: Custom Tool -->
+        <div class="demo-example fade-in">
+            <div class="demo-example-title">Custom Tools</div>
+            <div class="demo-dual">
+                <div class="terminal">
+                    <div class="terminal-bar">
+                        <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                        <span class="terminal-title">Primary Machine</span>
+                    </div>
+                    <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">clawgate tool register calc \</span>
+<span class="cmd">    --command "bc -l" --allow-args "-q" \</span>
+<span class="cmd">    --description "Calculator"</span>
+Tool registered
+
+<span class="prompt">$</span> <span class="cmd">clawgate grant --tool calc --ttl 4h</span>
+<span class="token-out">eyJhbGciOiJFZDI1NTE5IiwidHlwIjoiSldUIn0.eyJpc3MiOi...</span></div>
+                </div>
+                <div class="terminal">
+                    <div class="terminal-bar">
+                        <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                        <span class="terminal-title">Agent Machine</span>
+                    </div>
+                    <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">echo "scale=2; 22/7" | clawgate tool calc</span>
+3.14</div>
+                </div>
+            </div>
+            <div class="audit-strip">
+                <div class="terminal-bar">
+                    <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                    <span class="terminal-title">Audit Log (primary machine)</span>
+                </div>
+                <div class="terminal-body"><span class="success">2026-02-08T14:35:12Z</span> AUDIT req=<span class="dim">req_9d47c18f</span> op=tool
+  path=calc <span class="success">success=true</span></div>
+            </div>
+        </div>
+
+        <!-- Token Handoff + Security Denials -->
+        <div class="demo-example fade-in">
+            <div class="demo-example-title">Token Handoff + Security</div>
+            <div class="demo-dual">
+                <div class="chat-wrap">
+                    <div class="chat-label">Telegram</div>
+                    <div class="chat-sender user">You</div>
+                    <div class="chat-msg outgoing">
+                        <div class="chat-token">eyJhbGciOiJFZDI1NTE5IiwidHlwIjoiSldUIn0.eyJpc3MiOiJjbGF3Z2F0ZSIsInN1YiI6ImFnZW50LTEiLCJleHAiOj...</div>
+                    </div>
+                    <div class="chat-time right">14:31</div>
+                    <div class="chat-sender">Agent</div>
+                    <div class="chat-msg incoming">
+                        Token added: <strong>cg_9ae7ce62</strong>. I now have read access to <code style="font-size:0.72rem">~/projects/webapp/**</code>. Expires in 24h.
+                    </div>
+                    <div class="chat-time">14:31</div>
+                </div>
+                <div class="terminal">
+                    <div class="terminal-bar">
+                        <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                        <span class="terminal-title">Agent Machine</span>
+                    </div>
+                    <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">clawgate cat ~/.ssh/id_rsa</span>
+<span class="err">Error: ACCESS_DENIED: Forbidden path</span>
+
+<span class="prompt">$</span> <span class="cmd">clawgate git ~/projects/webapp push origin main</span>
+<span class="err">Error: SCOPE_VIOLATION: Insufficient git permissions</span></div>
+                </div>
+            </div>
+            <div class="audit-strip">
+                <div class="terminal-bar">
+                    <div class="terminal-dots"><span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span></div>
+                    <span class="terminal-title">Audit Log (primary machine)</span>
+                </div>
+                <div class="terminal-body"><span class="err">2026-02-08T14:36:00Z</span> AUDIT req=<span class="dim">req_552621fd</span> op=read
+  path=/home/mario/.ssh/id_rsa <span class="err">success=false error=ACCESS_DENIED</span>
+<span class="err">2026-02-08T14:36:05Z</span> AUDIT req=<span class="dim">req_79565e1c</span> op=git
+  path=/home/mario/projects/webapp <span class="err">success=false error=SCOPE_VIOLATION</span></div>
             </div>
         </div>
     </div>
