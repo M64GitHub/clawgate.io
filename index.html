@@ -916,7 +916,7 @@
         <h1>Secure Files, Git &amp; Tools for AI Agents</h1>
 
         <p class="hero-desc">
-            Give your isolated AI agent scoped, time-limited, audited access to files, git, and custom tools &mdash; without exposing your machine.
+					Give your isolated AI agent scoped, time-limited, audited access to files, git, and custom tools &mdash; without exposing your machine.<br/>
             <strong>Assume the agent is compromised.</strong>
         </p>
 
@@ -1064,11 +1064,11 @@
                 <div class="step-content">
                     <h3>Generate Keys &amp; Grant Access</h3>
                     <p class="step-desc">On your primary machine (laptop / workstation)</p>
-                    <div class="code-block"><code><span class="cmd">clawgate keygen</span>
-<span class="cmd">clawgate grant --read "~/projects/**" --ttl 24h > token.txt</span>
-<span class="comment"># Or with git access:</span>
-<span class="cmd">clawgate grant --git "~/projects/**" --ttl 24h > token.txt</span>
-<span class="comment"># Or grant a registered tool:</span>
+							<div class="code-block"><code><span class="cmd">clawgate keygen</span><br/>
+								<span class="cmd">clawgate grant --read "~/projects/**" --ttl 24h > token.txt</span><br/>
+								<span class="comment"># Or with git access:</span><br/>
+								<span class="cmd">clawgate grant --git "~/projects/**" --ttl 24h > token.txt</span><br/>
+								<span class="comment"># Or grant a registered tool:</span><br/>
 <span class="cmd">clawgate grant --tool web-fetch --ttl 4h > token.txt</span></code></div>
                 </div>
             </div>
@@ -1087,10 +1087,10 @@
                 <div class="step-content">
                     <h3>Start Agent</h3>
                     <p class="step-desc">On the isolated machine (Mac Mini, VPS, container)</p>
-                    <div class="code-block"><code><span class="cmd">mkdir -p ~/.clawgate/keys</span>
-<span class="cmd">mv public.key ~/.clawgate/keys/</span>
-<span class="cmd">clawgate token add "$(cat token.txt)"</span>
-<span class="cmd">clawgate --mode agent</span></code></div>
+							<div class="code-block"><code><span class="cmd">mkdir -p ~/.clawgate/keys</span><br/>
+								<span class="cmd">mv public.key ~/.clawgate/keys/</span><br/>
+								<span class="cmd">clawgate token add "$(cat token.txt)"</span><br/>
+								<span class="cmd">clawgate --mode agent</span></code></div><br/>
                 </div>
             </div>
 
