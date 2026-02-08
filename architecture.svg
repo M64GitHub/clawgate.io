@@ -1,143 +1,150 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 520" font-family="'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif">
   <defs>
-    <linearGradient id="boxGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1a1a25"/>
-      <stop offset="100%" stop-color="#12121a"/>
+    <linearGradient id="tunnelGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#e07a3a;stop-opacity:0.15"/>
+      <stop offset="50%" style="stop-color:#e07a3a;stop-opacity:0.08"/>
+      <stop offset="100%" style="stop-color:#e07a3a;stop-opacity:0.15"/>
     </linearGradient>
-    
     <filter id="glow">
-      <feGaussianBlur stdDeviation="3" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-    
-    <filter id="softGlow">
       <feGaussianBlur stdDeviation="2" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
   </defs>
-  
+
   <!-- Background -->
-  <rect width="900" height="400" fill="#0a0a0f"/>
-  
-  <!-- Subtle grid -->
-  <g opacity="0.08">
-    <path d="M0 50h900M0 100h900M0 150h900M0 200h900M0 250h900M0 300h900M0 350h900" stroke="#00d4ff" stroke-width="0.5" fill="none"/>
-    <path d="M100 0v400M200 0v400M300 0v400M400 0v400M500 0v400M600 0v400M700 0v400M800 0v400" stroke="#00d4ff" stroke-width="0.5" fill="none"/>
-  </g>
-  
-  <!-- LEFT BOX: Your Laptop -->
-  <g transform="translate(40, 25)">
-    <rect x="0" y="0" width="270" height="175" rx="8" fill="url(#boxGrad)" stroke="#e63946" stroke-width="2" filter="url(#softGlow)"/>
-    <rect x="0" y="0" width="270" height="32" rx="8" fill="#e63946" opacity="0.15"/>
-    <rect x="0" y="24" width="270" height="8" fill="url(#boxGrad)"/>
-    
-    <text x="135" y="22" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#e63946" text-anchor="middle">YOUR LAPTOP</text>
-    
-    <text x="20" y="55" font-family="monospace" font-size="12" fill="#808090">~/projects/</text>
-    <text x="20" y="73" font-family="monospace" font-size="12" fill="#808090">~/documents/</text>
-    
-    <line x1="20" y1="88" x2="250" y2="88" stroke="#2a2a3a" stroke-width="1"/>
-    
-    <text x="20" y="112" font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#00d4ff">ClawGate Resource</text>
-    <text x="20" y="130" font-family="system-ui, sans-serif" font-size="13" fill="#00d4ff">Daemon</text>
-    
-    <!-- Lock icon -->
-    <g transform="translate(215, 105)" filter="url(#softGlow)">
-      <rect x="4" y="10" width="22" height="18" rx="3" fill="none" stroke="#4ecdc4" stroke-width="2"/>
-      <path d="M9 10V6a6 6 0 0112 0v4" fill="none" stroke="#4ecdc4" stroke-width="2"/>
-      <circle cx="15" cy="19" r="3" fill="#4ecdc4"/>
-    </g>
-  </g>
-  
-  <!-- RIGHT BOX: Isolated Machine -->
-  <g transform="translate(590, 25)">
-    <rect x="0" y="0" width="270" height="175" rx="8" fill="url(#boxGrad)" stroke="#00d4ff" stroke-width="2" filter="url(#softGlow)"/>
-    <rect x="0" y="0" width="270" height="32" rx="8" fill="#00d4ff" opacity="0.12"/>
-    <rect x="0" y="24" width="270" height="8" fill="url(#boxGrad)"/>
-    
-    <text x="135" y="22" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#00d4ff" text-anchor="middle">ISOLATED MACHINE</text>
-    
-    <text x="20" y="55" font-family="system-ui, sans-serif" font-size="12" fill="#808090">OpenClaw / Claude Code</text>
-    <text x="20" y="73" font-family="system-ui, sans-serif" font-size="12" fill="#808090">ClawGate Agent</text>
-    
-    <line x1="20" y1="88" x2="250" y2="88" stroke="#2a2a3a" stroke-width="1"/>
-    
-    <text x="20" y="112" font-family="monospace" font-size="11" fill="#7b2cbf">"Read ~/projects/</text>
-    <text x="20" y="128" font-family="monospace" font-size="11" fill="#7b2cbf"> app/src/main.zig"</text>
-    
-    <!-- Robot icon -->
-    <g transform="translate(210, 100)" filter="url(#softGlow)">
-      <rect x="0" y="8" width="30" height="24" rx="4" fill="none" stroke="#4ecdc4" stroke-width="2"/>
-      <circle cx="10" cy="18" r="4" fill="#4ecdc4"/>
-      <circle cx="20" cy="18" r="4" fill="#4ecdc4"/>
-      <rect x="8" y="0" width="14" height="10" rx="3" fill="none" stroke="#4ecdc4" stroke-width="2"/>
-    </g>
-  </g>
-  
-  <!-- CONNECTION -->
-  <g>
-    <!-- Animated dashed line -->
-    <line x1="310" y1="113" x2="590" y2="113" stroke="#00d4ff" stroke-width="2" stroke-dasharray="10,5" filter="url(#softGlow)">
-      <animate attributeName="stroke-dashoffset" from="30" to="0" dur="1s" repeatCount="indefinite"/>
-    </line>
-    
-    <!-- Arrows -->
-    <polygon points="315,113 328,107 328,119" fill="#00d4ff" filter="url(#softGlow)"/>
-    <polygon points="585,113 572,107 572,119" fill="#00d4ff" filter="url(#softGlow)"/>
-    
-    <!-- Label box -->
-    <rect x="390" y="88" width="120" height="50" rx="6" fill="#0a0a0f" stroke="#7b2cbf" stroke-width="1.5"/>
-    <text x="450" y="110" font-family="monospace" font-size="13" font-weight="bold" fill="#00d4ff" text-anchor="middle">TCP:4223</text>
-    <text x="450" y="128" font-family="system-ui, sans-serif" font-size="10" fill="#7b2cbf" text-anchor="middle">E2E Encrypted</text>
-  </g>
-  
-  <!-- BOTTOM: Validation flow -->
-  <g>
-    <!-- Connecting lines -->
-    <path d="M175 200 L175 230 L725 230 L725 200" fill="none" stroke="#2a2a3a" stroke-width="1.5" stroke-dasharray="5,3"/>
-    <circle cx="175" cy="200" r="4" fill="#e63946"/>
-    <circle cx="725" cy="200" r="4" fill="#00d4ff"/>
-    
-    <!-- Validation box -->
-    <rect x="130" y="245" width="640" height="130" rx="8" fill="url(#boxGrad)" stroke="#2a2a3a" stroke-width="1"/>
-    
-    <!-- Left column -->
-    <g transform="translate(160, 275)">
-      <circle cx="0" cy="0" r="11" fill="#4ecdc4" opacity="0.2"/>
-      <text x="0" y="5" font-size="13" fill="#4ecdc4" text-anchor="middle" font-family="system-ui">✓</text>
-      <text x="22" y="5" font-family="system-ui, sans-serif" font-size="12" fill="#fff">Validates Ed25519 token signature</text>
-    </g>
-    
-    <g transform="translate(160, 305)">
-      <circle cx="0" cy="0" r="11" fill="#4ecdc4" opacity="0.2"/>
-      <text x="0" y="5" font-size="13" fill="#4ecdc4" text-anchor="middle" font-family="system-ui">✓</text>
-      <text x="22" y="5" font-family="system-ui, sans-serif" font-size="12" fill="#fff">Checks path is in granted scope</text>
-    </g>
-    
-    <!-- Right column -->
-    <g transform="translate(480, 275)">
-      <circle cx="0" cy="0" r="11" fill="#4ecdc4" opacity="0.2"/>
-      <text x="0" y="5" font-size="13" fill="#4ecdc4" text-anchor="middle" font-family="system-ui">✓</text>
-      <text x="22" y="5" font-family="system-ui, sans-serif" font-size="12" fill="#fff">Logs to audit trail</text>
-    </g>
-    
-    <g transform="translate(480, 305)">
-      <circle cx="0" cy="0" r="11" fill="#4ecdc4" opacity="0.2"/>
-      <text x="0" y="5" font-size="13" fill="#4ecdc4" text-anchor="middle" font-family="system-ui">✓</text>
-      <text x="22" y="5" font-family="system-ui, sans-serif" font-size="12" fill="#fff">Returns file content</text>
-    </g>
-    
-    <!-- Bottom tagline -->
-    <text x="450" y="360" font-family="monospace" font-size="10" fill="#606070" text-anchor="middle">ZERO TRUST  •  CAPABILITY-BASED  •  TIME-BOUNDED  •  AUDITED</text>
-  </g>
-  
-  <!-- Decorative corner glows -->
-  <circle cx="0" cy="0" r="120" fill="#e63946" opacity="0.03"/>
-  <circle cx="900" cy="400" r="120" fill="#00d4ff" opacity="0.03"/>
+  <rect width="880" height="520" rx="12" fill="#12141c"/>
+
+  <!-- Tunnel background -->
+  <rect x="340" y="60" width="200" height="400" rx="8" fill="url(#tunnelGrad)"/>
+
+  <!-- ==================== LEFT SIDE: AGENT ==================== -->
+
+  <!-- Agent box -->
+  <rect x="30" y="70" width="290" height="380" rx="10" fill="#1a1d28" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <text x="175" y="100" text-anchor="middle" fill="#9ca3b4" font-size="11" font-weight="600" letter-spacing="0.08em">ISOLATED MACHINE</text>
+
+  <!-- AI Agent -->
+  <rect x="55" y="125" width="240" height="60" rx="8" fill="#1f2330" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <text x="100" y="153" fill="#e8eaf0" font-size="13" font-weight="600">AI Agent</text>
+  <text x="100" y="170" fill="#6b7280" font-size="10">OpenClaw · Claude Code · Cursor · ...</text>
+  <!-- Agent icon -->
+  <circle cx="75" cy="155" r="12" fill="rgba(224,122,58,0.12)" stroke="rgba(224,122,58,0.3)" stroke-width="1"/>
+  <text x="75" y="159" text-anchor="middle" fill="#e07a3a" font-size="11">🤖</text>
+
+  <!-- Arrow: Agent → Agent Daemon -->
+  <line x1="175" y1="185" x2="175" y2="205" stroke="#6b7280" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="195" y="199" fill="#6b7280" font-size="9">Unix socket</text>
+
+  <!-- Agent Daemon -->
+  <rect x="55" y="208" width="240" height="55" rx="8" fill="#1f2330" stroke="rgba(224,122,58,0.2)" stroke-width="1"/>
+  <text x="100" y="233" fill="#e07a3a" font-size="12" font-weight="600">Agent Daemon</text>
+  <text x="100" y="250" fill="#6b7280" font-size="10">Token store · Request proxy</text>
+  <!-- Shield icon -->
+  <circle cx="75" cy="235" r="12" fill="rgba(224,122,58,0.12)" stroke="rgba(224,122,58,0.3)" stroke-width="1"/>
+  <text x="75" y="239" text-anchor="middle" fill="#e07a3a" font-size="11">🛡</text>
+
+  <!-- Operations the agent can do -->
+  <rect x="55" y="285" width="240" height="90" rx="8" fill="#161922" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <text x="175" y="306" text-anchor="middle" fill="#9ca3b4" font-size="10" font-weight="600" letter-spacing="0.06em">AGENT COMMANDS</text>
+
+  <text x="72" y="325" fill="#34d399" font-family="'JetBrains Mono', monospace" font-size="9.5">clawgate cat</text>
+  <text x="175" y="325" fill="#34d399" font-family="'JetBrains Mono', monospace" font-size="9.5">clawgate ls</text>
+  <text x="72" y="342" fill="#60a5fa" font-family="'JetBrains Mono', monospace" font-size="9.5">clawgate git</text>
+  <text x="175" y="342" fill="#60a5fa" font-family="'JetBrains Mono', monospace" font-size="9.5">clawgate write</text>
+  <text x="72" y="359" fill="#fbbf24" font-family="'JetBrains Mono', monospace" font-size="9.5">clawgate tool</text>
+  <text x="175" y="359" fill="#fbbf24" font-family="'JetBrains Mono', monospace" font-size="9.5">clawgate stat</text>
+
+  <!-- MCP label -->
+  <rect x="55" y="395" width="240" height="35" rx="6" fill="#161922" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <text x="175" y="417" text-anchor="middle" fill="#6b7280" font-size="10">MCP Server (optional) · stdio interface</text>
+
+  <!-- ==================== CENTER: TUNNEL ==================== -->
+
+  <!-- Encrypted tunnel -->
+  <rect x="355" y="215" width="170" height="42" rx="6" fill="rgba(224,122,58,0.08)" stroke="rgba(224,122,58,0.25)" stroke-width="1"/>
+  <text x="440" y="234" text-anchor="middle" fill="#e07a3a" font-size="10" font-weight="600">E2E Encrypted Tunnel</text>
+  <text x="440" y="248" text-anchor="middle" fill="#9ca3b4" font-size="9">X25519 + XChaCha20-Poly1305</text>
+
+  <!-- Arrows through tunnel -->
+  <line x1="320" y1="236" x2="355" y2="236" stroke="#e07a3a" stroke-width="1.5" filter="url(#glow)"/>
+  <polygon points="353,232 360,236 353,240" fill="#e07a3a"/>
+
+  <line x1="525" y1="236" x2="560" y2="236" stroke="#e07a3a" stroke-width="1.5" filter="url(#glow)"/>
+  <polygon points="557,232 564,236 557,240" fill="#e07a3a"/>
+
+  <!-- Port label -->
+  <text x="440" y="278" text-anchor="middle" fill="#6b7280" font-size="9">TCP :4223</text>
+
+  <!-- Validation gates (center) -->
+  <rect x="370" y="295" width="140" height="135" rx="6" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <text x="440" y="314" text-anchor="middle" fill="#9ca3b4" font-size="10" font-weight="600" letter-spacing="0.05em">VALIDATION GATES</text>
+
+  <text x="385" y="336" fill="#34d399" font-size="9">✓</text>
+  <text x="398" y="336" fill="#9ca3b4" font-size="9.5">Signature check</text>
+
+  <text x="385" y="354" fill="#34d399" font-size="9">✓</text>
+  <text x="398" y="354" fill="#9ca3b4" font-size="9.5">Token expiry</text>
+
+  <text x="385" y="372" fill="#34d399" font-size="9">✓</text>
+  <text x="398" y="372" fill="#9ca3b4" font-size="9.5">Revocation list</text>
+
+  <text x="385" y="390" fill="#34d399" font-size="9">✓</text>
+  <text x="398" y="390" fill="#9ca3b4" font-size="9.5">Scope validation</text>
+
+  <text x="385" y="408" fill="#34d399" font-size="9">✓</text>
+  <text x="398" y="408" fill="#9ca3b4" font-size="9.5">Argument allowlist</text>
+
+  <text x="385" y="426" fill="#34d399" font-size="9">✓</text>
+  <text x="398" y="426" fill="#9ca3b4" font-size="9.5">Forbidden paths</text>
+
+  <!-- ==================== RIGHT SIDE: RESOURCE ==================== -->
+
+  <!-- Resource box -->
+  <rect x="560" y="70" width="290" height="380" rx="10" fill="#1a1d28" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <text x="705" y="100" text-anchor="middle" fill="#9ca3b4" font-size="11" font-weight="600" letter-spacing="0.08em">YOUR MACHINE</text>
+
+  <!-- Resource Daemon -->
+  <rect x="585" y="125" width="240" height="55" rx="8" fill="#1f2330" stroke="rgba(224,122,58,0.2)" stroke-width="1"/>
+  <text x="630" y="150" fill="#e07a3a" font-size="12" font-weight="600">Resource Daemon</text>
+  <text x="630" y="167" fill="#6b7280" font-size="10">Validates · Executes · Audits</text>
+  <!-- Shield icon -->
+  <circle cx="605" cy="152" r="12" fill="rgba(224,122,58,0.12)" stroke="rgba(224,122,58,0.3)" stroke-width="1"/>
+  <text x="605" y="156" text-anchor="middle" fill="#e07a3a" font-size="11">🛡</text>
+
+  <!-- Arrow: Daemon → Resources -->
+  <line x1="705" y1="180" x2="705" y2="200" stroke="#6b7280" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- Protected resources -->
+  <!-- Files -->
+  <rect x="585" y="205" width="115" height="52" rx="6" fill="#161922" stroke="rgba(52,211,153,0.2)" stroke-width="1"/>
+  <text x="642" y="228" text-anchor="middle" fill="#34d399" font-size="11" font-weight="600">📁 Files</text>
+  <text x="642" y="245" text-anchor="middle" fill="#6b7280" font-size="9">read · write · stat</text>
+
+  <!-- Git -->
+  <rect x="710" y="205" width="115" height="52" rx="6" fill="#161922" stroke="rgba(96,165,250,0.2)" stroke-width="1"/>
+  <text x="767" y="228" text-anchor="middle" fill="#60a5fa" font-size="11" font-weight="600">⎇ Git</text>
+  <text x="767" y="245" text-anchor="middle" fill="#6b7280" font-size="9">3-tier allowlists</text>
+
+  <!-- Tools -->
+  <rect x="585" y="267" width="240" height="52" rx="6" fill="#161922" stroke="rgba(251,191,36,0.2)" stroke-width="1"/>
+  <text x="705" y="290" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="600">⚙ Registered Tools</text>
+  <text x="705" y="307" text-anchor="middle" fill="#6b7280" font-size="9">Any CLI tool · argument validation · output limits</text>
+
+  <!-- Forbidden paths -->
+  <rect x="585" y="335" width="240" height="40" rx="6" fill="rgba(248,113,113,0.06)" stroke="rgba(248,113,113,0.15)" stroke-width="1"/>
+  <text x="605" y="357" fill="#f87171" font-size="9">🚫</text>
+  <text x="622" y="358" fill="#f87171" font-family="'JetBrains Mono', monospace" font-size="9">~/.ssh  ~/.aws  ~/.gnupg</text>
+  <text x="807" y="358" fill="#6b7280" font-size="9">blocked</text>
+
+  <!-- Audit log -->
+  <rect x="585" y="390" width="240" height="42" rx="6" fill="#161922" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <text x="705" y="410" text-anchor="middle" fill="#9ca3b4" font-size="10" font-weight="500">📋 Audit Log</text>
+  <text x="705" y="424" text-anchor="middle" fill="#6b7280" font-size="9">Every operation · path · tool · result</text>
+
+  <!-- ==================== BOTTOM LABELS ==================== -->
+  <text x="175" y="475" text-anchor="middle" fill="#6b7280" font-size="10" font-style="italic">Agent never touches your filesystem</text>
+  <text x="705" y="475" text-anchor="middle" fill="#6b7280" font-size="10" font-style="italic">Only validated requests reach resources</text>
+
+  <!-- Title -->
+  <text x="440" y="500" text-anchor="middle" fill="#e07a3a" font-size="11" font-weight="600" letter-spacing="0.05em">CLAWGATE ARCHITECTURE · v0.3</text>
 </svg>
