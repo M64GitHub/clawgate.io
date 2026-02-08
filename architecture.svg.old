@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400">
+  <defs>
+    <linearGradient id="boxGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a25"/>
+      <stop offset="100%" stop-color="#12121a"/>
+    </linearGradient>
+    
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="900" height="400" fill="#0a0a0f"/>
+  
+  <!-- Subtle grid -->
+  <g opacity="0.08">
+    <path d="M0 50h900M0 100h900M0 150h900M0 200h900M0 250h900M0 300h900M0 350h900" stroke="#00d4ff" stroke-width="0.5" fill="none"/>
+    <path d="M100 0v400M200 0v400M300 0v400M400 0v400M500 0v400M600 0v400M700 0v400M800 0v400" stroke="#00d4ff" stroke-width="0.5" fill="none"/>
+  </g>
+  
+  <!-- LEFT BOX: Your Laptop -->
+  <g transform="translate(40, 25)">
+    <rect x="0" y="0" width="270" height="175" rx="8" fill="url(#boxGrad)" stroke="#e63946" stroke-width="2" filter="url(#softGlow)"/>
+    <rect x="0" y="0" width="270" height="32" rx="8" fill="#e63946" opacity="0.15"/>
+    <rect x="0" y="24" width="270" height="8" fill="url(#boxGrad)"/>
+    
+    <text x="135" y="22" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#e63946" text-anchor="middle">YOUR LAPTOP</text>
+    
+    <text x="20" y="55" font-family="monospace" font-size="12" fill="#808090">~/projects/</text>
+    <text x="20" y="73" font-family="monospace" font-size="12" fill="#808090">~/documents/</text>
+    
+    <line x1="20" y1="88" x2="250" y2="88" stroke="#2a2a3a" stroke-width="1"/>
+    
+    <text x="20" y="112" font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#00d4ff">ClawGate Resource</text>
+    <text x="20" y="130" font-family="system-ui, sans-serif" font-size="13" fill="#00d4ff">Daemon</text>
+    
+    <!-- Lock icon -->
+    <g transform="translate(215, 105)" filter="url(#softGlow)">
+      <rect x="4" y="10" width="22" height="18" rx="3" fill="none" stroke="#4ecdc4" stroke-width="2"/>
+      <path d="M9 10V6a6 6 0 0112 0v4" fill="none" stroke="#4ecdc4" stroke-width="2"/>
+      <circle cx="15" cy="19" r="3" fill="#4ecdc4"/>
+    </g>
+  </g>
+  
+  <!-- RIGHT BOX: Isolated Machine -->
+  <g transform="translate(590, 25)">
+    <rect x="0" y="0" width="270" height="175" rx="8" fill="url(#boxGrad)" stroke="#00d4ff" stroke-width="2" filter="url(#softGlow)"/>
+    <rect x="0" y="0" width="270" height="32" rx="8" fill="#00d4ff" opacity="0.12"/>
+    <rect x="0" y="24" width="270" height="8" fill="url(#boxGrad)"/>
+    
+    <text x="135" y="22" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#00d4ff" text-anchor="middle">ISOLATED MACHINE</text>
+    
+    <text x="20" y="55" font-family="system-ui, sans-serif" font-size="12" fill="#808090">OpenClaw / Claude Code</text>
+    <text x="20" y="73" font-family="system-ui, sans-serif" font-size="12" fill="#808090">ClawGate Agent</text>
+    
+    <line x1="20" y1="88" x2="250" y2="88" stroke="#2a2a3a" stroke-width="1"/>
+    
+    <text x="20" y="112" font-family="monospace" font-size="11" fill="#7b2cbf">"Read ~/projects/</text>
+    <text x="20" y="128" font-family="monospace" font-size="11" fill="#7b2cbf"> app/src/main.zig"</text>
+    
+    <!-- Robot icon -->
+    <g transform="translate(210, 100)" filter="url(#softGlow)">
+      <rect x="0" y="8" width="30" height="24" rx="4" fill="none" stroke="#4ecdc4" stroke-width="2"/>
+      <circle cx="10" cy="18" r="4" fill="#4ecdc4"/>
+      <circle cx="20" cy="18" r="4" fill="#4ecdc4"/>
+      <rect x="8" y="0" width="14" height="10" rx="3" fill="none" stroke="#4ecdc4" stroke-width="2"/>
+    </g>
+  </g>
+  
+  <!-- CONNECTION -->
+  <g>
+    <!-- Animated dashed line -->
+    <line x1="310" y1="113" x2="590" y2="113" stroke="#00d4ff" stroke-width="2" stroke-dasharray="10,5" filter="url(#softGlow)">
+      <animate attributeName="stroke-dashoffset" from="30" to="0" dur="1s" repeatCount="indefinite"/>
+    </line>
+    
+    <!-- Arrows -->
+    <polygon points="315,113 328,107 328,119" fill="#00d4ff" filter="url(#softGlow)"/>
+    <polygon points="585,113 572,107 572,119" fill="#00d4ff" filter="url(#softGlow)"/>
+    
+    <!-- Label box -->
+    <rect x="390" y="88" width="120" height="50" rx="6" fill="#0a0a0f" stroke="#7b2cbf" stroke-width="1.5"/>
+    <text x="450" y="110" font-family="monospace" font-size="13" font-weight="bold" fill="#00d4ff" text-anchor="middle">TCP:4223</text>
+    <text x="450" y="128" font-family="system-ui, sans-serif" font-size="10" fill="#7b2cbf" text-anchor="middle">E2E Encrypted</text>
+  </g>
+  
+  <!-- BOTTOM: Validation flow -->
+  <g>
+    <!-- Connecting lines -->
+    <path d="M175 200 L175 230 L725 230 L725 200" fill="none" stroke="#2a2a3a" stroke-width="1.5" stroke-dasharray="5,3"/>
+    <circle cx="175" cy="200" r="4" fill="#e63946"/>
+    <circle cx="725" cy="200" r="4" fill="#00d4ff"/>
+    
+    <!-- Validation box -->
+    <rect x="130" y="245" width="640" height="130" rx="8" fill="url(#boxGrad)" stroke="#2a2a3a" stroke-width="1"/>
+    
+    <!-- Left column -->
+    <g transform="translate(160, 275)">
+      <circle cx="0" cy="0" r="11" fill="#4ecdc4" opacity="0.2"/>
+      <text x="0" y="5" font-size="13" fill="#4ecdc4" text-anchor="middle" font-family="system-ui">✓</text>
+      <text x="22" y="5" font-family="system-ui, sans-serif" font-size="12" fill="#fff">Validates Ed25519 token signature</text>
+    </g>
+    
+    <g transform="translate(160, 305)">
+      <circle cx="0" cy="0" r="11" fill="#4ecdc4" opacity="0.2"/>
+      <text x="0" y="5" font-size="13" fill="#4ecdc4" text-anchor="middle" font-family="system-ui">✓</text>
+      <text x="22" y="5" font-family="system-ui, sans-serif" font-size="12" fill="#fff">Checks path is in granted scope</text>
+    </g>
+    
+    <!-- Right column -->
+    <g transform="translate(480, 275)">
+      <circle cx="0" cy="0" r="11" fill="#4ecdc4" opacity="0.2"/>
+      <text x="0" y="5" font-size="13" fill="#4ecdc4" text-anchor="middle" font-family="system-ui">✓</text>
+      <text x="22" y="5" font-family="system-ui, sans-serif" font-size="12" fill="#fff">Logs to audit trail</text>
+    </g>
+    
+    <g transform="translate(480, 305)">
+      <circle cx="0" cy="0" r="11" fill="#4ecdc4" opacity="0.2"/>
+      <text x="0" y="5" font-size="13" fill="#4ecdc4" text-anchor="middle" font-family="system-ui">✓</text>
+      <text x="22" y="5" font-family="system-ui, sans-serif" font-size="12" fill="#fff">Returns file content</text>
+    </g>
+    
+    <!-- Bottom tagline -->
+    <text x="450" y="360" font-family="monospace" font-size="10" fill="#606070" text-anchor="middle">ZERO TRUST  •  CAPABILITY-BASED  •  TIME-BOUNDED  •  AUDITED</text>
+  </g>
+  
+  <!-- Decorative corner glows -->
+  <circle cx="0" cy="0" r="120" fill="#e63946" opacity="0.03"/>
+  <circle cx="900" cy="400" r="120" fill="#00d4ff" opacity="0.03"/>
+</svg>

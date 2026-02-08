@@ -1,10 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 520" font-family="'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif">
   <defs>
-    <linearGradient id="tunnelGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#e07a3a;stop-opacity:0.15"/>
-      <stop offset="50%" style="stop-color:#e07a3a;stop-opacity:0.08"/>
-      <stop offset="100%" style="stop-color:#e07a3a;stop-opacity:0.15"/>
-    </linearGradient>
     <filter id="glow">
       <feGaussianBlur stdDeviation="2" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
@@ -13,9 +8,6 @@
 
   <!-- Background -->
   <rect width="880" height="520" rx="12" fill="#12141c"/>
-
-  <!-- Tunnel background -->
-  <rect x="340" y="60" width="200" height="400" rx="8" fill="url(#tunnelGrad)"/>
 
   <!-- ==================== LEFT SIDE: AGENT ==================== -->
 
@@ -60,44 +52,45 @@
   <rect x="55" y="380" width="240" height="35" rx="6" fill="#161922" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
   <text x="175" y="402" text-anchor="middle" fill="#6b7280" font-size="10">MCP Server (optional) · stdio interface</text>
 
-  <!-- ==================== CENTER: TUNNEL ==================== -->
+  <!-- ==================== CENTER: TUNNEL + VALIDATION ==================== -->
 
-  <!-- Encrypted tunnel -->
+  <!-- Validation gates - freestanding info box, top-aligned with machine boxes -->
+  <rect x="362" y="70" width="156" height="195" rx="8" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <text x="440" y="96" text-anchor="middle" fill="#9ca3b4" font-size="10" font-weight="600" letter-spacing="0.05em">VALIDATION GATES</text>
+  <text x="440" y="112" text-anchor="middle" fill="#6b7280" font-size="8.5">(resource-side enforcement)</text>
+
+  <text x="378" y="138" fill="#34d399" font-size="9">✓</text>
+  <text x="391" y="138" fill="#9ca3b4" font-size="9.5">Signature check</text>
+
+  <text x="378" y="158" fill="#34d399" font-size="9">✓</text>
+  <text x="391" y="158" fill="#9ca3b4" font-size="9.5">Token expiry</text>
+
+  <text x="378" y="178" fill="#34d399" font-size="9">✓</text>
+  <text x="391" y="178" fill="#9ca3b4" font-size="9.5">Revocation list</text>
+
+  <text x="378" y="198" fill="#34d399" font-size="9">✓</text>
+  <text x="391" y="198" fill="#9ca3b4" font-size="9.5">Scope validation</text>
+
+  <text x="378" y="218" fill="#34d399" font-size="9">✓</text>
+  <text x="391" y="218" fill="#9ca3b4" font-size="9.5">Argument allowlist</text>
+
+  <text x="378" y="238" fill="#34d399" font-size="9">✓</text>
+  <text x="391" y="238" fill="#9ca3b4" font-size="9.5">Forbidden paths</text>
+
+  <!-- Encrypted tunnel box -->
   <rect x="355" y="315" width="170" height="42" rx="6" fill="rgba(224,122,58,0.08)" stroke="rgba(224,122,58,0.25)" stroke-width="1"/>
   <text x="440" y="334" text-anchor="middle" fill="#e07a3a" font-size="10" font-weight="600">E2E Encrypted Tunnel</text>
   <text x="440" y="348" text-anchor="middle" fill="#9ca3b4" font-size="9">X25519 + XChaCha20-Poly1305</text>
 
   <!-- Arrows through tunnel -->
-  <line x1="320" y1="336" x2="355" y2="336" stroke="#e07a3a" stroke-width="1.5" filter="url(#glow)"/>
-  <polygon points="353,332 360,336 353,340" fill="#e07a3a"/>
+  <line x1="320" y1="336" x2="350" y2="336" stroke="#e07a3a" stroke-width="1.5" filter="url(#glow)"/>
+  <polygon points="349,332 356,336 349,340" fill="#e07a3a"/>
 
-  <line x1="525" y1="336" x2="560" y2="336" stroke="#e07a3a" stroke-width="1.5" filter="url(#glow)"/>
-  <polygon points="557,332 564,336 557,340" fill="#e07a3a"/>
+  <line x1="525" y1="336" x2="555" y2="336" stroke="#e07a3a" stroke-width="1.5" filter="url(#glow)"/>
+  <polygon points="554,332 561,336 554,340" fill="#e07a3a"/>
 
   <!-- Port label -->
-  <text x="440" y="378" text-anchor="middle" fill="#6b7280" font-size="9">TCP :4223</text>
-
-  <!-- Validation gates (center) -->
-  <rect x="370" y="120" width="140" height="165" rx="6" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-  <text x="440" y="142" text-anchor="middle" fill="#9ca3b4" font-size="10" font-weight="600" letter-spacing="0.05em">VALIDATION GATES</text>
-
-  <text x="385" y="166" fill="#34d399" font-size="9">✓</text>
-  <text x="398" y="166" fill="#9ca3b4" font-size="9.5">Signature check</text>
-
-  <text x="385" y="186" fill="#34d399" font-size="9">✓</text>
-  <text x="398" y="186" fill="#9ca3b4" font-size="9.5">Token expiry</text>
-
-  <text x="385" y="206" fill="#34d399" font-size="9">✓</text>
-  <text x="398" y="206" fill="#9ca3b4" font-size="9.5">Revocation list</text>
-
-  <text x="385" y="226" fill="#34d399" font-size="9">✓</text>
-  <text x="398" y="226" fill="#9ca3b4" font-size="9.5">Scope validation</text>
-
-  <text x="385" y="246" fill="#34d399" font-size="9">✓</text>
-  <text x="398" y="246" fill="#9ca3b4" font-size="9.5">Argument allowlist</text>
-
-  <text x="385" y="266" fill="#34d399" font-size="9">✓</text>
-  <text x="398" y="266" fill="#9ca3b4" font-size="9.5">Forbidden paths</text>
+  <text x="440" y="378" text-anchor="middle" fill="#6b7280" font-size="9">TCP :53280</text>
 
   <!-- ==================== RIGHT SIDE: RESOURCE ==================== -->
 
