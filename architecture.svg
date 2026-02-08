@@ -82,12 +82,16 @@
   <text x="440" y="334" text-anchor="middle" fill="#e07a3a" font-size="10" font-weight="600">E2E Encrypted Tunnel</text>
   <text x="440" y="348" text-anchor="middle" fill="#9ca3b4" font-size="9">X25519 + XChaCha20-Poly1305</text>
 
-  <!-- Arrows through tunnel -->
-  <line x1="320" y1="336" x2="350" y2="336" stroke="#e07a3a" stroke-width="1.5" filter="url(#glow)"/>
-  <polygon points="349,332 356,336 349,340" fill="#e07a3a"/>
+  <!-- Arrows through tunnel - bidirectional -->
+  <!-- Left side (agent box edge 320 → tunnel box edge 355) -->
+  <line x1="320" y1="336" x2="355" y2="336" stroke="#e07a3a" stroke-width="1.5" filter="url(#glow)"/>
+  <polygon points="348,332 355,336 348,340" fill="#e07a3a"/>
+  <polygon points="327,332 320,336 327,340" fill="#e07a3a"/>
 
-  <line x1="525" y1="336" x2="555" y2="336" stroke="#e07a3a" stroke-width="1.5" filter="url(#glow)"/>
-  <polygon points="554,332 561,336 554,340" fill="#e07a3a"/>
+  <!-- Right side (tunnel box edge 525 → resource box edge 560) -->
+  <line x1="525" y1="336" x2="560" y2="336" stroke="#e07a3a" stroke-width="1.5" filter="url(#glow)"/>
+  <polygon points="553,332 560,336 553,340" fill="#e07a3a"/>
+  <polygon points="532,332 525,336 532,340" fill="#e07a3a"/>
 
   <!-- Port label -->
   <text x="440" y="378" text-anchor="middle" fill="#6b7280" font-size="9">TCP :53280</text>
