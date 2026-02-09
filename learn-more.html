@@ -794,7 +794,7 @@ clawgate --mode agent</span></code></pre>
 <section class="section" id="security">
     <div class="section-label">Defense in Depth</div>
     <h2>Security Model</h2>
-    <p class="subtitle">14 layers of protection. Assume breach at every layer.</p>
+    <p class="subtitle">15 layers of protection. Assume breach at every layer.</p>
 
     <table class="security-table">
         <thead>
@@ -810,6 +810,7 @@ clawgate --mode agent</span></code></pre>
             <tr><td>Forbidden Paths</td><td>~/.ssh, ~/.aws, ~/.gnupg - hardcoded, ungrantable</td></tr>
             <tr><td>Git Allowlists</td><td>Three-tier command allowlists, blocked flags (-c, --exec)</td></tr>
             <tr><td>Argument Validation</td><td>Per-tool allowlist/denylist for command flags</td></tr>
+	    <tr><td>Tool Path Validation</td><td>All tool arguments scanned for paths, validated against per-tool scope</td></tr>
             <tr><td>No Shell Execution</td><td>Tools run via direct argv, no shell interpolation</td></tr>
             <tr><td>Output Limits</td><td>Per-tool configurable output truncation</td></tr>
             <tr><td>Symlink Rejection</td><td>All symlinks unconditionally rejected</td></tr>
